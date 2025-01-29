@@ -1,10 +1,8 @@
 package erronka;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -15,65 +13,62 @@ import javax.swing.border.EmptyBorder;
 public class App extends JFrame {
 
     private static final long serialVersionUID = 1L;
-    private JPanel contentPane;
-
-    public static void main(String[] args) {
-        EventQueue.invokeLater(() -> {
-            try {
-                App frame = new App();
-                frame.setVisible(true);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-    }
+    private JPanel contentPane; // Edukia gordetzeko panela
 
     public App() {
-        setTitle("Base de Datos - Erronka2");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 600, 400);
+        // Leihoaren ezarpenak
+        setTitle("DATU BASEA"); // Leihoaren izenburua
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Itxierako ekintza
+        setBounds(100, 100, 850, 500); // Leihoaren tamaina eta kokapena
+
+        // Edukia gordeko duen panela sortu eta konfiguratu
         contentPane = new JPanel();
-        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        contentPane.setLayout(null);
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5)); // Mugak definitu
+        contentPane.setLayout(null); // Layout pertsonalizatua
         setContentPane(contentPane);
 
-        JButton btnLangileak = new JButton("Mostrar Langileak");
+        // Botoiak sortu eta gehitu
+        JButton btnLangileak = new JButton("Langileak Erakutsi"); // Langileen datuak erakusteko botoia
         btnLangileak.setBounds(20, 20, 200, 30);
         contentPane.add(btnLangileak);
 
-        JButton btnProduktuak = new JButton("Mostrar Produktuak");
+        JButton btnProduktuak = new JButton("Produktuak Erakutsi"); // Produktuen datuak erakusteko botoia
         btnProduktuak.setBounds(20, 60, 200, 30);
         contentPane.add(btnProduktuak);
 
-        JButton btnCerrar = new JButton("Cerrar");
-        btnCerrar.setBounds(20, 100, 200, 30);
-        contentPane.add(btnCerrar);
+        JButton btnItxi = new JButton("Itxi"); // Aplikazioa ixteko botoia
+        btnItxi.setBounds(20, 100, 200, 30);
+        contentPane.add(btnItxi);
 
-        JPanel panelTabla = new JPanel();
-        panelTabla.setBounds(250, 20, 320, 300);
-        contentPane.add(panelTabla);
-        panelTabla.setLayout(new BorderLayout());
+        // Taula bistaratzeko panela sortu
+        JPanel taulaPanela = new JPanel();
+        taulaPanela.setBounds(250, 20, 500, 350);
+        contentPane.add(taulaPanela);
+        taulaPanela.setLayout(new BorderLayout());
 
+        // "Langileak Erakutsi" botoiari ekintza gehitu
         btnLangileak.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                JTable table = Kontsulta.getTableData("langileak");
-                panelTabla.removeAll();
-                panelTabla.add(new JScrollPane(table), BorderLayout.CENTER);
-                panelTabla.revalidate();
-                panelTabla.repaint();
+                JTable table = Kontsulta.getTableData("langileak"); // Langileen datuak eskuratu
+                taulaPanela.removeAll(); // Aurreko edukia kendu
+                taulaPanela.add(new JScrollPane(table), BorderLayout.CENTER); // Taula gehitu
+                taulaPanela.revalidate(); // Berritu edukia
+                taulaPanela.repaint(); // Taula berriz margotu
             }
         });
 
+        // "Produktuak Erakutsi" botoiari ekintza gehitu
         btnProduktuak.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                JTable table = Kontsulta.getTableData("produktuak");
-                panelTabla.removeAll();
-                panelTabla.add(new JScrollPane(table), BorderLayout.CENTER);
-                panelTabla.revalidate();
-                panelTabla.repaint();
+                JTable table = Kontsulta.getTableData("produktuak"); // Produktuen datuak eskuratu
+                taulaPanela.removeAll(); // Aurreko edukia kendu
+                taulaPanela.add(new JScrollPane(table), BorderLayout.CENTER); // Taula gehitu
+                taulaPanela.revalidate(); // Berritu edukia
+                taulaPanela.repaint(); // Taula berriz margotu
             }
         });
 
-        btnCerrar.addActionListener(e -> System.exit(0));
+        // "Itxi" botoiari ekintza gehitu (aplikazioa ixteko)
+        btnItxi.addActionListener(e -> System.exit(0));
     }
 }

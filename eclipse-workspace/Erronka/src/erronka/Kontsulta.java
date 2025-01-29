@@ -9,33 +9,33 @@ import javax.swing.table.DefaultTableModel;
 public class Kontsulta {
 
     public static JTable getTableData(String tableName) {
-        DefaultTableModel model = new DefaultTableModel();
-        JTable table = new JTable(model);
+        DefaultTableModel model = new DefaultTableModel(); // Taularen eredua sortu
+        JTable table = new JTable(model); // JTable objektua sortu ereduarekin
 
-        try (Connection conn = DBKonexioa.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT * FROM " + tableName)) {
+        try (Connection conn = DBKonexioa.getConnection(); // Datu-basearekin konexioa ezarri
+             Statement stmt = conn.createStatement(); // SQL kontsultak egiteko objektua sortu
+             ResultSet rs = stmt.executeQuery("SELECT * FROM " + tableName)) { // Taulako datuak eskuratu
 
-            int columnCount = rs.getMetaData().getColumnCount();
-
-            // Añadir columnas al modelo
+            int columnCount = rs.getMetaData().getColumnCount(); // Zutabe kopurua lortu
+            
+            // Zutabe izenak gehitu taularen ereduari
             for (int i = 1; i <= columnCount; i++) {
                 model.addColumn(rs.getMetaData().getColumnName(i));
             }
 
-            // Añadir filas al modelo
+            // Datuak errenkadatan gehitu
             while (rs.next()) {
-                Object[] row = new Object[columnCount];
+                Object[] row = new Object[columnCount]; // Errenkada berria sortu
                 for (int i = 0; i < columnCount; i++) {
-                    row[i] = rs.getObject(i + 1);
+                    row[i] = rs.getObject(i + 1); // Zutabeko balioa lortu eta errenkadan gehitu
                 }
-                model.addRow(row);
+                model.addRow(row); // Errenkada taularen ereduari gehitu
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Erroreak terminalean inprimatu
         }
 
-        return table;
+        return table; // JTable objektua itzuli
     }
 }
