@@ -62,41 +62,53 @@ public class Login extends JFrame {
             String erabiltzailea = txtErabiltzailea.getText();
             String pasahitza = new String(txtPasahitza.getPassword());
 
-            // Egiaztatu erabiltzailea eta pasahitza
-            if (egiaztatu(erabiltzailea, pasahitza)) {
-                // Login arrakastatsua bada
-                JOptionPane.showMessageDialog(this, "Saioa sartzea arrakastatsua", "Arrakasta", JOptionPane.INFORMATION_MESSAGE);
+            // Egiaztatu erabiltzailea eta pasahitza, eta lortu informazioa
+            String[] erabiltzaileDatuak = egiaztatu(erabiltzailea, pasahitza);
+
+            if (erabiltzaileDatuak != null) {
+                String izena = erabiltzaileDatuak[0];
+                String abizena = erabiltzaileDatuak[1];
+                String mota = erabiltzaileDatuak[2];
+
+                // Ongi etorri mezua erakutsi
+                JOptionPane.showMessageDialog(this, "Ongi etorri, " + izena + " " +abizena+ "! " + mota + " zara.", "Ongi Etorri", JOptionPane.INFORMATION_MESSAGE);
+
                 this.dispose(); // Login leihoa itxi
                 appIreki(); // Aplikazioa ireki
             } else {
                 saiakerak++; // Saiakera bat gehiago egin da
-                // Saiakera okerrak kontrolatzen ditugu
                 if (saiakerak >= 3) {
                     JOptionPane.showMessageDialog(this, "3 saiakera okerrak egin dituzu. Programa itxi egingo da.", "Akatsa", JOptionPane.ERROR_MESSAGE);
                     System.exit(0); // 3 saiakera okerrak, programa itxi
                 } else {
                     // Saiakera okerra izan bada, erabiltzaileari abisua ematen diogu
-                    JOptionPane.showMessageDialog(this, "Erabiltzailea edo pasahitza okerrak. "+saiakerak+"/3", "Akatsa", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Erabiltzailea edo pasahitza okerrak. " + saiakerak + "/3", "Akatsa", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
     }
 
-    private boolean egiaztatu(String erabiltzailea, String pasahitza) {
-        String sql = "SELECT * FROM langileak WHERE Erabiltzailea = ? AND Pasahitza = ?";
+    private String[] egiaztatu(String erabiltzailea, String pasahitza) {
+        // SQL kontsulta erabiltzailearen izena eta mota lortzeko
+        String sql = "SELECT Izena, Abizena, Langile_Mota FROM langileak WHERE Erabiltzailea = ? AND Pasahitza = ?";
         try (Connection conn = DBKonexioa.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, erabiltzailea); // Erabiltzailea prestatzen dugu
-            pstmt.setString(2, pasahitza); // Pasahitza prestatzen dugu
-            ResultSet rs = pstmt.executeQuery(); // Datu-basea kontsultatzea
+            pstmt.setString(1, erabiltzailea);
+            pstmt.setString(2, pasahitza);
+            ResultSet rs = pstmt.executeQuery();
 
-            return rs.next(); // Saioa aurkitzen bada, true itzuli
+            if (rs.next()) {
+                String izena = rs.getString("Izena");
+                String abizena = rs.getString("Abizena");
+                String mota = rs.getString("Langile_Mota");
+                return new String[]{izena, abizena, mota}; // Izena eta mota itzultzen ditu
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
-            return false; // Akats bat gertatzen bada, false itzuli
         }
+        return null; // Erabiltzailea ez bada aurkitu, null itzuli
     }
 
     private void appIreki() {
@@ -111,3 +123,4 @@ public class Login extends JFrame {
         });
     }
 }
+

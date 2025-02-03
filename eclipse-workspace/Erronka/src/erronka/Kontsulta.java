@@ -8,7 +8,7 @@ import javax.swing.table.DefaultTableModel;
 
 public class Kontsulta {
 
-    public static JTable getTableData(String tableName) {
+    public static JTable getTaulenDatuak (String tableName) {
         DefaultTableModel model = new DefaultTableModel(); // Taularen eredua sortu
         JTable table = new JTable(model); // JTable objektua sortu ereduarekin
 
