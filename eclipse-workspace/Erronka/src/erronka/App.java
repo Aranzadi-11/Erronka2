@@ -32,7 +32,7 @@ public class App extends JFrame {
         btnLangileak.setBounds(20, 20, 200, 30);
         contentPane.add(btnLangileak);
 
-        JButton btnProduktuak = new JButton("Produktuak Erakutsi"); // Produktuen datuak erakusteko botoia
+        JButton btnProduktuak = new JButton("Stock-a Erakutsi"); // Produktuen datuak erakusteko botoia
         btnProduktuak.setBounds(20, 60, 200, 30);
         contentPane.add(btnProduktuak);
 
@@ -49,7 +49,7 @@ public class App extends JFrame {
         // "Langileak Erakutsi" botoiari ekintza gehitu
         btnLangileak.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                JTable table = Kontsulta.getTableData("langileak"); // Langileen datuak eskuratu
+                JTable table = Kontsulta.getTaulenDatuak("langileak"); // Langileen datuak eskuratu
                 taulaPanela.removeAll(); // Aurreko edukia kendu
                 taulaPanela.add(new JScrollPane(table), BorderLayout.CENTER); // Taula gehitu
                 taulaPanela.revalidate(); // Berritu edukia
@@ -57,10 +57,10 @@ public class App extends JFrame {
             }
         });
 
-        // "Produktuak Erakutsi" botoiari ekintza gehitu
+        // "Stock Erakutsi" botoiari ekintza gehitu
         btnProduktuak.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                JTable table = Kontsulta.getTableData("produktuak"); // Produktuen datuak eskuratu
+                JTable table = Kontsulta.getTaulenDatuak("stock"); // Produktuen datuak eskuratu
                 taulaPanela.removeAll(); // Aurreko edukia kendu
                 taulaPanela.add(new JScrollPane(table), BorderLayout.CENTER); // Taula gehitu
                 taulaPanela.revalidate(); // Berritu edukia
