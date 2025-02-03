@@ -10,7 +10,7 @@ public class Kontsulta {
 
     public static JTable getTaulenDatuak (String tableName) {
         DefaultTableModel model = new DefaultTableModel(); // Taularen eredua sortu
-        JTable table = new JTable(model); // JTable objektua sortu ereduarekin
+        JTable table = new JTable(model); // JTable objektua sortu 
 
         try (Connection conn = DBKonexioa.getConnection(); // Datu-basearekin konexioa ezarri
              Statement stmt = conn.createStatement(); // SQL kontsultak egiteko objektua sortu
@@ -18,14 +18,14 @@ public class Kontsulta {
 
             int columnCount = rs.getMetaData().getColumnCount(); // Zutabe kopurua lortu
             
-            // Zutabe izenak gehitu taularen ereduari
+            // Zutabe izenak gehitu taula bakoitzaren arabera
             for (int i = 1; i <= columnCount; i++) {
                 model.addColumn(rs.getMetaData().getColumnName(i));
             }
 
-            // Datuak errenkadatan gehitu
+            // Datuak errenkadatan gehitzeko metodoa konfigurat
             while (rs.next()) {
-                Object[] row = new Object[columnCount]; // Errenkada berria sortu
+                Object[] row = new Object[columnCount]; // Errenkada berria sortu datu berri bakoizarentzat
                 for (int i = 0; i < columnCount; i++) {
                     row[i] = rs.getObject(i + 1); // Zutabeko balioa lortu eta errenkadan gehitu
                 }

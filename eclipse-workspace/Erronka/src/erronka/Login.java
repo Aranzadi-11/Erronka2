@@ -1,7 +1,6 @@
 package erronka;
 
 import java.awt.EventQueue;
-import java.awt.GridLayout;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,46 +22,52 @@ public class Login extends JFrame {
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
             try {
-                // Datu-basearekin konektatzen saiatzen gara
+                //Datu-basearekin konektatzen saiatu
                 Connection conn = DBKonexioa.getConnection();
                 if (conn != null) {
-                    conn.close(); // Konektatuta egon bada, itxi
+                    conn.close();
+                    // konexioa egiten bada login-a agertu
                     Login frame = new Login();
-                    frame.setVisible(true); // Login leihoa bistaratzen da
+                    frame.setVisible(true);
                 }
             } catch (Exception e) {
-                // Datu-basearekin konektatzean errore bat gertatzen bada
-                JOptionPane.showMessageDialog(null, "Datu-basearekin konektatzen saiatzeko akats bat gertatu da: " + e.getMessage(), "Akatsa", JOptionPane.ERROR_MESSAGE);
-                System.exit(1); // Programaren exekuzioa gelditzen da
+                JOptionPane.showMessageDialog(null, 
+                    "Datu-basearekin konektatzean akats bat gertatu da: " + e.getMessage(), 
+                    "Akatsa", JOptionPane.ERROR_MESSAGE);
+                System.exit(1);
             }
         });
     }
 
     public Login() {
-        setTitle("SAIOA SARTU");
+        setTitle("SAIOA HASI");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(150, 150, 400, 300); // Leihoaren tamaina eta kokapena
+        setBounds(150, 150, 400, 300); // leihoaren kokapena eta dimentsioak
+
         JPanel contentPane = new JPanel();
-        contentPane.setLayout(new GridLayout(6, 5, 30, 10)); // Layout-a definitzen dugu
+        contentPane.setLayout(new java.awt.GridLayout(6, 5, 30, 10));
         setContentPane(contentPane);
 
+        // Erabiltzaile izena sartzeo gelaxka
         contentPane.add(new JLabel("Erabiltzailea:"));
         txtErabiltzailea = new JTextField();
-        contentPane.add(txtErabiltzailea); // Erabiltzailearen sarrera
+        contentPane.add(txtErabiltzailea);
 
+        // Erabiltzailearen pasahitza sartzeko gelaxka
         contentPane.add(new JLabel("Pasahitza:"));
         txtPasahitza = new JPasswordField();
-        contentPane.add(txtPasahitza); // Pasahitzaren sarrera
+        contentPane.add(txtPasahitza);
 
-        JButton btnLogin = new JButton("Sartu");
-        contentPane.add(btnLogin); // Sartu botoia
+        // Log-in egiteko botoia
+        JButton btnLogin = new JButton("Login egin");
+        contentPane.add(btnLogin);
 
-        // Sartu botoian ekintza bat gehitzen dugu
+        // Login botoiaren akzioen konfigurazioa
         btnLogin.addActionListener(e -> {
-            String erabiltzailea = txtErabiltzailea.getText();
-            String pasahitza = new String(txtPasahitza.getPassword());
+            String erabiltzailea = txtErabiltzailea.getText(); // Textu modukoa izateko formatua
+            String pasahitza = new String(txtPasahitza.getPassword()); // Pasahitz moduan agertzeko formatua
 
-            // Egiaztatu erabiltzailea eta pasahitza, eta lortu informazioa
+            // "langileak" taulan SQL kontsulta eginez, lortu login egin duen langilearen beharrezko informazioa
             String[] erabiltzaileDatuak = egiaztatu(erabiltzailea, pasahitza);
 
             if (erabiltzaileDatuak != null) {
@@ -71,51 +76,58 @@ public class Login extends JFrame {
                 String mota = erabiltzaileDatuak[2];
 
                 // Ongi etorri mezua erakutsi
-                JOptionPane.showMessageDialog(this, "Ongi etorri, " + izena + " " +abizena+ "! " + mota + " zara.", "Ongi Etorri", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, 
+                        "Ongi etorri, " + izena + " " + abizena + "! " + mota + " zara.", 
+                        "Ongi Etorri", JOptionPane.INFORMATION_MESSAGE);
+                this.dispose();  // Login frame-a itxi
 
-                this.dispose(); // Login leihoa itxi
-                appIreki(); // Aplikazioa ireki
+                // App frame-a ireki, eta parametro bezala "Langile_Mota" bidali
+                appIreki(mota);
             } else {
-                saiakerak++; // Saiakera bat gehiago egin da
+                saiakerak++;
                 if (saiakerak >= 3) {
-                    JOptionPane.showMessageDialog(this, "3 saiakera okerrak egin dituzu. Programa itxi egingo da.", "Akatsa", JOptionPane.ERROR_MESSAGE);
-                    System.exit(0); // 3 saiakera okerrak, programa itxi
+                    JOptionPane.showMessageDialog(this, 
+                        "3 saiakera okerrak egin dituzu. Programa itxi egingo da.", 
+                        "Akatsa", JOptionPane.ERROR_MESSAGE);
+                    System.exit(0);
                 } else {
-                    // Saiakera okerra izan bada, erabiltzaileari abisua ematen diogu
-                    JOptionPane.showMessageDialog(this, "Erabiltzailea edo pasahitza okerrak. " + saiakerak + "/3", "Akatsa", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, 
+                        "Erabiltzailea edo pasahitza okerrak. " + saiakerak + "/3", 
+                        "Akatsa", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
     }
 
-    private String[] egiaztatu(String erabiltzailea, String pasahitza) {
-        // SQL kontsulta erabiltzailearen izena eta mota lortzeko
+    // Langilearen informazioa lortzeko metodoa
+    private String[] egiaztatu(String erabiltzailea, String pasahitza) { 
         String sql = "SELECT Izena, Abizena, Langile_Mota FROM langileak WHERE Erabiltzailea = ? AND Pasahitza = ?";
         try (Connection conn = DBKonexioa.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
+        	
+        	//Gelaxkan sartutako datuak, taulan daudenekin alderatu
             pstmt.setString(1, erabiltzailea);
             pstmt.setString(2, pasahitza);
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
+            	//Datuak ondo badaude, langile horren datu gehiago lortu ondoren ongietorri mezuan agertzeko
                 String izena = rs.getString("Izena");
                 String abizena = rs.getString("Abizena");
                 String mota = rs.getString("Langile_Mota");
-                return new String[]{izena, abizena, mota}; // Izena eta mota itzultzen ditu
+                return new String[]{izena, abizena, mota};
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null; // Erabiltzailea ez bada aurkitu, null itzuli
+        return null;
     }
 
-    private void appIreki() {
+    //App clasea ireki langile mota kontuan hartuz
+    private void appIreki(String mota) {
         EventQueue.invokeLater(() -> {
             try {
-                // Aplikazioa irekitzen da
-                App frame = new App();
+                App frame = new App(mota);
                 frame.setVisible(true);
             } catch (Exception e) {
                 e.printStackTrace();

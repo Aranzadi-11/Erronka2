@@ -1,74 +1,79 @@
 package erronka;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.border.EmptyBorder;
 
 public class App extends JFrame {
 
-    private static final long serialVersionUID = 1L;
-    private JPanel contentPane; // Edukia gordetzeko panela
-
-    public App() {
-        // Leihoaren ezarpenak
-        setTitle("DATU BASEA"); // Leihoaren izenburua
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Itxierako ekintza
-        setBounds(100, 100, 850, 500); // Leihoaren tamaina eta kokapena
-
-        // Edukia gordeko duen panela sortu eta konfiguratu
-        contentPane = new JPanel();
-        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5)); // Mugak definitu
-        contentPane.setLayout(null); // Layout pertsonalizatua
+    private JPanel contentPane;  // Panel Nagusia
+    private JPanel menuPanel;    // Menuko botoiak gordetzen dituen panela
+    private JPanel tablePanel;   // Taula bistaratzen den panela
+    private String mota;         // Erabiltzaile mota (Login klasetik ekarrita langile motaren arabera)
+    
+    public App(String mota) {
+        this.mota = mota;
+        setTitle("Datu-base kudeaketa");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(150, 150, 850, 500);
+        
+        // Panel nagusia bistaratu
+        contentPane = new JPanel(new BorderLayout());
         setContentPane(contentPane);
+        
+        // Menu panela ezkerrean agertu
+        menuPanel = new JPanel(new GridLayout(6, 1, 10, 10));
+        
+        // "Administratzailea" bada, gehitu menuan "langileak" botoia
+        if (mota.equals("Administratzailea")) {
+            JButton btnLangileak = new JButton("Langileak");
+            btnLangileak.addActionListener(e -> loadTable("langileak"));
+            menuPanel.add(btnLangileak);
+        }
+        
+        // Beste taulen botoiak beti bestaratu
+        JButton btnStock = new JButton("Stock-a");
+        btnStock.addActionListener(e -> loadTable("stock"));
+        menuPanel.add(btnStock);
+        
+        JButton btnEmailea = new JButton("Emailea");
+        btnEmailea.addActionListener(e -> loadTable("emailea"));
+        menuPanel.add(btnEmailea);
+        
+        JButton btnErabiltzaileak = new JButton("Erabiltzaileak");
+        btnErabiltzaileak.addActionListener(e -> loadTable("erabiltzaileak"));
+        menuPanel.add(btnErabiltzaileak);
+        
+        JButton btnEskaerak = new JButton("Eskaerak");
+        btnEskaerak.addActionListener(e -> loadTable("eskaerak"));
+        menuPanel.add(btnEskaerak);
+        
+        // Gehitu "Irten" botoia, aplikazioa amaitzeko
+        JButton btnIrten = new JButton("Irten");
+        btnIrten.addActionListener(e -> System.exit(0));
+        menuPanel.add(btnIrten);
+        
+        // Menu panela ezkerrean gehitu
+        contentPane.add(menuPanel, BorderLayout.WEST);
+        
+        // Taula panela sortu erdialdean
+        tablePanel = new JPanel(new BorderLayout());
+        contentPane.add(tablePanel, BorderLayout.CENTER);
+        
+        // Lehenik eta behin, kargatu "Stock-a" taula bezala default
+        loadTable("stock");
+    }
 
-        // Botoiak sortu eta gehitu
-        JButton btnLangileak = new JButton("Langileak Erakutsi"); // Langileen datuak erakusteko botoia
-        btnLangileak.setBounds(20, 20, 200, 30);
-        contentPane.add(btnLangileak);
-
-        JButton btnProduktuak = new JButton("Stock-a Erakutsi"); // Produktuen datuak erakusteko botoia
-        btnProduktuak.setBounds(20, 60, 200, 30);
-        contentPane.add(btnProduktuak);
-
-        JButton btnItxi = new JButton("Itxi"); // Aplikazioa ixteko botoia
-        btnItxi.setBounds(20, 100, 200, 30);
-        contentPane.add(btnItxi);
-
-        // Taula bistaratzeko panela sortu
-        JPanel taulaPanela = new JPanel();
-        taulaPanela.setBounds(250, 20, 500, 350);
-        contentPane.add(taulaPanela);
-        taulaPanela.setLayout(new BorderLayout());
-
-        // "Langileak Erakutsi" botoiari ekintza gehitu
-        btnLangileak.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                JTable table = Kontsulta.getTaulenDatuak("langileak"); // Langileen datuak eskuratu
-                taulaPanela.removeAll(); // Aurreko edukia kendu
-                taulaPanela.add(new JScrollPane(table), BorderLayout.CENTER); // Taula gehitu
-                taulaPanela.revalidate(); // Berritu edukia
-                taulaPanela.repaint(); // Taula berriz margotu
-            }
-        });
-
-        // "Stock Erakutsi" botoiari ekintza gehitu
-        btnProduktuak.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                JTable table = Kontsulta.getTaulenDatuak("stock"); // Produktuen datuak eskuratu
-                taulaPanela.removeAll(); // Aurreko edukia kendu
-                taulaPanela.add(new JScrollPane(table), BorderLayout.CENTER); // Taula gehitu
-                taulaPanela.revalidate(); // Berritu edukia
-                taulaPanela.repaint(); // Taula berriz margotu
-            }
-        });
-
-        // "Itxi" botoiari ekintza gehitu (aplikazioa ixteko)
-        btnItxi.addActionListener(e -> System.exit(0));
+    private void loadTable(String tableName) {
+        JTable table = Kontsulta.getTaulenDatuak(tableName);
+        tablePanel.removeAll();  // Lehenengo, kendu aurreko eduki guztiak
+        tablePanel.add(new JScrollPane(table), BorderLayout.CENTER);  // Gehitu taula berria scroll-panearekin
+        tablePanel.revalidate();  // Eguneratu panela
+        tablePanel.repaint();     // Berriz margotu panela
     }
 }
+
