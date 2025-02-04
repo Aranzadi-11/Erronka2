@@ -45,7 +45,7 @@ public class Login extends JFrame {
         setBounds(150, 150, 400, 300); // leihoaren kokapena eta dimentsioak
 
         JPanel contentPane = new JPanel();
-        contentPane.setLayout(new java.awt.GridLayout(6, 5, 30, 10));
+        contentPane.setLayout(new java.awt.GridLayout(9, 5, 30, 10));
         setContentPane(contentPane);
 
         // Erabiltzaile izena sartzeo gelaxka
@@ -123,7 +123,7 @@ public class Login extends JFrame {
         return null;
     }
 
-    //App clasea ireki langile mota kontuan hartuz
+    //App klasea ireki langile mota kontuan hartuz
     private void appIreki(String mota) {
         EventQueue.invokeLater(() -> {
             try {
