@@ -6,36 +6,39 @@ import java.sql.Statement;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+// Datu-baseko taulen datuak eskuratu eta JTable objektu bat osatu
 public class Kontsulta {
 
-    public static JTable getTaulenDatuak (String tableName) {
-        DefaultTableModel model = new DefaultTableModel(); // Taularen eredua sortu
-        JTable table = new JTable(model); // JTable objektua sortu 
+    //Aukeratutako taularen datuak eskuratzen ditu eta JTable bidez erakusten ditu
+    public static JTable lortuTaulenDatuak(String taulaIzena) {
+        DefaultTableModel modeloa = new DefaultTableModel();
+        JTable taula = new JTable(modeloa);
 
-        try (Connection conn = DBKonexioa.getConnection(); // Datu-basearekin konexioa ezarri
-             Statement stmt = conn.createStatement(); // SQL kontsultak egiteko objektua sortu
-             ResultSet rs = stmt.executeQuery("SELECT * FROM " + tableName)) { // Taulako datuak eskuratu
+        //Konexioa ezarri ondoren aukeratutako taularen datuak eskuratzen ditu
+        try (Connection konexioa = DBKonexioa.lortuKonexioa();
+             Statement stmt = konexioa.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT * FROM " + taulaIzena)) {
 
-            int columnCount = rs.getMetaData().getColumnCount(); // Zutabe kopurua lortu
-            
-            // Zutabe izenak gehitu taula bakoitzaren arabera
-            for (int i = 1; i <= columnCount; i++) {
-                model.addColumn(rs.getMetaData().getColumnName(i));
+            int zutabeKop = rs.getMetaData().getColumnCount();
+            // Zutabe izenak gehitzen dira
+            for (int i = 1; i <= zutabeKop; i++) {
+                modeloa.addColumn(rs.getMetaData().getColumnName(i));
             }
 
-            // Datuak errenkadatan gehitzeko metodoa konfigurat
+            // Errenkada bakoitza modeloari gehitu
             while (rs.next()) {
-                Object[] row = new Object[columnCount]; // Errenkada berria sortu datu berri bakoizarentzat
-                for (int i = 0; i < columnCount; i++) {
-                    row[i] = rs.getObject(i + 1); // Zutabeko balioa lortu eta errenkadan gehitu
+                Object[] errenkada = new Object[zutabeKop];
+                for (int i = 0; i < zutabeKop; i++) {
+                    errenkada[i] = rs.getObject(i + 1);
                 }
-                model.addRow(row); // Errenkada taularen ereduari gehitu
+                modeloa.addRow(errenkada);
             }
 
         } catch (Exception e) {
-            e.printStackTrace(); // Erroreak terminalean inprimatu
+            e.printStackTrace();
         }
 
-        return table; // JTable objektua itzuli
+        return taula;
     }
 }
+
