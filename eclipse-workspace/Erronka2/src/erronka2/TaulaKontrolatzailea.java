@@ -18,43 +18,56 @@ public class TaulaKontrolatzailea {
         Ekintzak = new DBEkintzak();
     }
 
-    //Aukeratutako taula kargatu eta taula horretan ezarritako botoiak kargatu
+    // Taula kargatzeko eta taularen arabera akzioak gehitzeko metodoa
     public void kargatuTaula(String taulaIzena, TaulaPanela taulaPanela) {
         taula = Kontsulta.lortuTaulenDatuak(taulaIzena);
         taulaPanela.ezarriTaula(taula);
 
         JPanel operazioPanela = new JPanel(new FlowLayout());
 
+        //Taularen arabera akzioak definitu
         switch (taulaIzena) {
+        //"erabiltzaileak" eta "hornitzaileak" taulentzat dautak eguneratzeko eta ezabatzeko botoiak sortu
             case "erabiltzaileak":
             case "hornitzaileak":
-            	//Erregistroak eguneratzeko eta ezabatzeko botoiak sortu
                 JButton btnEguneratu = new JButton("Erregistroa Eguneratu");
+                btnEguneratu.setBackground(new Color(255, 200, 0));
+                btnEguneratu.setForeground(Color.BLACK);
                 btnEguneratu.addActionListener(e -> eguneratuErregistroa(taulaIzena));
                 operazioPanela.add(btnEguneratu);
 
                 JButton btnEzabatu = new JButton("Erregistroa Ezabatu");
+                btnEzabatu.setBackground(new Color(255, 200, 0));
+                btnEzabatu.setForeground(Color.BLACK);
                 btnEzabatu.addActionListener(e -> ezabatuErregistroa(taulaIzena));
                 operazioPanela.add(btnEzabatu);
                 break;
+              //"eskaerak" taularentzat dautak PDF formatuan deskargatzeko botoia sortu
             case "eskaerak":
-                //PDF-a sortzeko botoia jarri
                 JButton btnDescargarPDF = new JButton("Descargar PDF");
+                btnDescargarPDF.setBackground(new Color(255, 200, 0));
+                btnDescargarPDF.setForeground(Color.BLACK);
                 btnDescargarPDF.addActionListener(e -> descargarPDF());
                 operazioPanela.add(btnDescargarPDF);
                 break;
+              //"langileak" eta "stock" taulentzat dautak gehitzeko, eguneratzeko eta ezabatzeko botoiak sortu
             case "langileak":
             case "stock":
-            	//Erregistroak gehitzeko, eguneratzeko eta ezabatzeko botoiak sortu
                 JButton btnGehitu = new JButton("Erregistroa Gehitu");
+                btnGehitu.setBackground(new Color(255, 200, 0));
+                btnGehitu.setForeground(Color.BLACK);
                 btnGehitu.addActionListener(e -> gehituErregistroa(taulaIzena));
                 operazioPanela.add(btnGehitu);
 
                 JButton btnEguneratu2 = new JButton("Erregistroa Eguneratu");
+                btnEguneratu2.setBackground(new Color(255, 200, 0));
+                btnEguneratu2.setForeground(Color.BLACK);
                 btnEguneratu2.addActionListener(e -> eguneratuErregistroa(taulaIzena));
                 operazioPanela.add(btnEguneratu2);
 
                 JButton btnEzabatu2 = new JButton("Erregistroa Ezabatu");
+                btnEzabatu2.setBackground(new Color(255, 200, 0));
+                btnEzabatu2.setForeground(Color.BLACK);
                 btnEzabatu2.addActionListener(e -> ezabatuErregistroa(taulaIzena));
                 operazioPanela.add(btnEzabatu2);
                 break;
@@ -67,7 +80,7 @@ public class TaulaKontrolatzailea {
         }
     }
 
-    // PDF sortzeko metodoa ezarri erabiltzaileak aukeratzen duen egun eta erabiltzailea kontuan hartuz
+ // PDF sortzeko metodoa ezarri erabiltzaileak aukeratzen duen egun eta erabiltzailea kontuan hartuz
     private void descargarPDF() {
         // Aukeraketa egiteko erabiliko den panelaren konfigurazioa
         JPanel panel = new JPanel(new GridLayout(2, 2, 5, 5));
@@ -76,7 +89,7 @@ public class TaulaKontrolatzailea {
         JLabel lblDate = new JLabel("Eskaera_Data:");
         JComboBox<String> cmbDate = new JComboBox<>();
 
-        // ID_Erabiltzailea errepikatu gabe aukeraketa egiteko zerrenfa sortu
+        //ID_Erabiltzailea errepikatu gabe aukeraketa egiteko zerrenda sortu
         try (Connection conn = DBKonexioa.lortuKonexioa();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT DISTINCT ID_Erabiltzailea FROM eskaerak")) {
@@ -139,10 +152,10 @@ public class TaulaKontrolatzailea {
                 if (!fileToSave.getName().toLowerCase().endsWith(".pdf")) {
                     fileToSave = new File(fileToSave.getAbsolutePath() + ".pdf");
                 }
-                // Llamamos a la clase PDFGenerator para crear el PDF
+                // PdfSortzaile izeneko klaseari deitzen diogu
                 boolean success = PdfSortzailea.generatePDF(selectedUser, selectedDate, fileToSave);
                 if (success) {
-                    JOptionPane.showMessageDialog(null, "Faktura PDF formatuan gorde da: " + fileToSave.getAbsolutePath() + "helbidean.");
+                    JOptionPane.showMessageDialog(null, "Faktura PDF formatuan gorde da: " + fileToSave.getAbsolutePath() + " helbidean.");
                 } else {
                     JOptionPane.showMessageDialog(null, "Faktua sortzen akatsa!!!");
                 }
@@ -150,19 +163,25 @@ public class TaulaKontrolatzailea {
         }
     }
 
-    //Erregitroa gehitzeko funtzioa
-   
+    //Datuak gehitzeko funtzioa
     private void gehituErregistroa(String taulaIzena) {
         DefaultTableModel modeloa = (DefaultTableModel) taula.getModel();
-        int kop = modeloa.getColumnCount();
-        String[] zutabeIzenak = new String[kop];
-        for (int i = 0; i < kop; i++) {
-            zutabeIzenak[i] = taula.getColumnName(i);
+        String[] zutabeIzenak;
+        //Taula "langileak" bada, errenkadak limitatzen zaizkio batzuk automatikoki betetzen direlako
+        if (taulaIzena.equals("langileak")) {
+            zutabeIzenak = new String[]{"ID", "Izena", "Abizena", "Langile_Mota"};
+        } else {
+        	// Taula beste edozein bada errenkada guztietan datuak sartzen uzten da
+            int kop = modeloa.getColumnCount();
+            zutabeIzenak = new String[kop];
+            for (int i = 0; i < kop; i++) {
+                zutabeIzenak[i] = taula.getColumnName(i);
+            }
         }
 
-        JPanel sarreraPanela = new JPanel(new GridLayout(kop, 2, 5, 5));
-        JTextField[] eremua = new JTextField[kop];
-        for (int i = 0; i < kop; i++) {
+        JPanel sarreraPanela = new JPanel(new GridLayout(zutabeIzenak.length, 2, 5, 5));
+        JTextField[] eremua = new JTextField[zutabeIzenak.length];
+        for (int i = 0; i < zutabeIzenak.length; i++) {
             sarreraPanela.add(new JLabel(zutabeIzenak[i] + ":"));
             eremua[i] = new JTextField();
             sarreraPanela.add(eremua[i]);
@@ -171,8 +190,8 @@ public class TaulaKontrolatzailea {
         int emaitza = JOptionPane.showConfirmDialog(null, sarreraPanela,
                 "Erregistroa gehitu '" + taulaIzena + "'", JOptionPane.OK_CANCEL_OPTION);
         if (emaitza == JOptionPane.OK_OPTION) {
-            String[] balioak = new String[kop];
-            for (int i = 0; i < kop; i++) {
+            String[] balioak = new String[zutabeIzenak.length];
+            for (int i = 0; i < zutabeIzenak.length; i++) {
                 balioak[i] = eremua[i].getText().trim();
             }
             boolean arrakastatsua = Ekintzak.erregistroaGehitu(taulaIzena, zutabeIzenak, balioak);
@@ -180,7 +199,8 @@ public class TaulaKontrolatzailea {
             berriroKargatuTaula(taulaIzena);
         }
     }
-    //Erregistroa eguneratzeko funtzioa
+
+    // Datuak eguneratzeko funtzioa 
     private void eguneratuErregistroa(String taulaIzena) {
         int aukeratutakoErrenkada = taula.getSelectedRow();
         if (aukeratutakoErrenkada == -1) {
@@ -189,41 +209,82 @@ public class TaulaKontrolatzailea {
             return;
         }
         DefaultTableModel modeloa = (DefaultTableModel) taula.getModel();
-        int kop = modeloa.getColumnCount();
-        String giltzaZutabe = taula.getColumnName(0);
-        Object giltzaBalio = taula.getValueAt(aukeratutakoErrenkada, 0);
 
-        JPanel sarreraPanela = new JPanel(new GridLayout(kop - 1, 2, 5, 5));
-        List<String> eguneratuZutabeak = new ArrayList<>();
-        List<String> eguneratuBalioak = new ArrayList<>();
+      //Taula "langileak" bada, errenkadak limitatzen zaizkio batzuk automatikoki betetzen direlako
+        if (taulaIzena.equals("langileak")) {
+            String[] allowedColumns = {"ID", "Izena", "Abizena", "Langile_Mota"};
+            //ID-a jasotzen da errenkada aukeratzeko
+            int idColumnIndex = modeloa.findColumn("ID");
+            Object originalID = taula.getValueAt(aukeratutakoErrenkada, idColumnIndex);
 
-        for (int i = 1; i < kop; i++) {
-            String zutabeIzena = taula.getColumnName(i);
-            Object unekoBalioa = taula.getValueAt(aukeratutakoErrenkada, i);
-            sarreraPanela.add(new JLabel(zutabeIzena + ":"));
-            JTextField eremu = new JTextField(unekoBalioa != null ? unekoBalioa.toString() : "");
-            sarreraPanela.add(eremu);
-            eguneratuZutabeak.add(zutabeIzena);
-            eguneratuBalioak.add("");
-        }
+            JPanel sarreraPanela = new JPanel(new GridLayout(allowedColumns.length, 2, 5, 5));
+            List<String> eguneratuZutabeak = new ArrayList<>();
+            List<String> eguneratuBalioak = new ArrayList<>();
 
-        int emaitza = JOptionPane.showConfirmDialog(null, sarreraPanela,
-                "Erregistroa eguneratu (giltza: " + giltzaBalio + ")", JOptionPane.OK_CANCEL_OPTION);
-        if (emaitza == JOptionPane.OK_OPTION) {
-            Component[] osagaiak = sarreraPanela.getComponents();
-            eguneratuBalioak.clear();
-            for (int i = 1; i < osagaiak.length; i += 2) {
-                if (osagaiak[i] instanceof JTextField) {
-                    eguneratuBalioak.add(((JTextField) osagaiak[i]).getText().trim());
-                }
+            for (String col : allowedColumns) {
+                int colIndex = modeloa.findColumn(col);
+                Object currentValue = taula.getValueAt(aukeratutakoErrenkada, colIndex);
+                sarreraPanela.add(new JLabel(col + ":"));
+                JTextField eremu = new JTextField(currentValue != null ? currentValue.toString() : "");
+                sarreraPanela.add(eremu);
+                eguneratuZutabeak.add(col);
+                eguneratuBalioak.add(""); 
             }
-            boolean arrakastatsua = Ekintzak.erregistroaEguneratu(taulaIzena, giltzaZutabe, giltzaBalio.toString(),
-                    eguneratuZutabeak.toArray(new String[0]), eguneratuBalioak.toArray(new String[0]));
-            JOptionPane.showMessageDialog(null, arrakastatsua ? "Erregistroa eguneratuta." : "Akatsa erregistroa eguneratzean.");
-            berriroKargatuTaula(taulaIzena);
+
+            int emaitza = JOptionPane.showConfirmDialog(null, sarreraPanela,
+                    "Erregistroa eguneratu (giltza: " + originalID + ")", JOptionPane.OK_CANCEL_OPTION);
+            if (emaitza == JOptionPane.OK_OPTION) {
+                Component[] osagaiak = sarreraPanela.getComponents();
+                eguneratuBalioak.clear();
+                for (int i = 1; i < osagaiak.length; i += 2) {
+                    if (osagaiak[i] instanceof JTextField) {
+                        eguneratuBalioak.add(((JTextField) osagaiak[i]).getText().trim());
+                    }
+                }
+                boolean arrakastatsua = Ekintzak.erregistroaEguneratu(taulaIzena, "ID", originalID.toString(),
+                        eguneratuZutabeak.toArray(new String[0]), eguneratuBalioak.toArray(new String[0]));
+                JOptionPane.showMessageDialog(null, arrakastatsua ? "Erregistroa eguneratuta." : "Akatsa erregistroa eguneratzean.");
+                berriroKargatuTaula(taulaIzena);
+            }
+        } else {
+        	// Taula beste edozein bada errenkada guztietan datuak eguneratzen uzten da
+            int kop = modeloa.getColumnCount();
+            String giltzaZutabe = taula.getColumnName(0);
+            Object giltzaBalio = taula.getValueAt(aukeratutakoErrenkada, 0);
+
+            JPanel sarreraPanela = new JPanel(new GridLayout(kop - 1, 2, 5, 5));
+            List<String> eguneratuZutabeak = new ArrayList<>();
+            List<String> eguneratuBalioak = new ArrayList<>();
+
+            for (int i = 1; i < kop; i++) {
+                String zutabeIzena = taula.getColumnName(i);
+                Object unekoBalioa = taula.getValueAt(aukeratutakoErrenkada, i);
+                sarreraPanela.add(new JLabel(zutabeIzena + ":"));
+                JTextField eremu = new JTextField(unekoBalioa != null ? unekoBalioa.toString() : "");
+                sarreraPanela.add(eremu);
+                eguneratuZutabeak.add(zutabeIzena);
+                eguneratuBalioak.add("");
+            }
+
+            int emaitza = JOptionPane.showConfirmDialog(null, sarreraPanela,
+                    "Erregistroa eguneratu (giltza: " + giltzaBalio + ")", JOptionPane.OK_CANCEL_OPTION);
+            if (emaitza == JOptionPane.OK_OPTION) {
+                Component[] osagaiak = sarreraPanela.getComponents();
+                eguneratuBalioak.clear();
+                for (int i = 1; i < osagaiak.length; i += 2) {
+                    if (osagaiak[i] instanceof JTextField) {
+                        eguneratuBalioak.add(((JTextField) osagaiak[i]).getText().trim());
+                    }
+                }
+                boolean arrakastatsua = Ekintzak.erregistroaEguneratu(taulaIzena, giltzaZutabe, giltzaBalio.toString(),
+                        eguneratuZutabeak.toArray(new String[0]), eguneratuBalioak.toArray(new String[0]));
+                JOptionPane.showMessageDialog(null, arrakastatsua ? "Erregistroa eguneratuta." : "Akatsa erregistroa eguneratzean.");
+                berriroKargatuTaula(taulaIzena);
+            }
         }
     }
-    // erregistroa ezabatzeko funtzioa
+
+    // Datuak ezabatzeko funtzioa
     private void ezabatuErregistroa(String taulaIzena) {
         int aukeratutakoErrenkada = taula.getSelectedRow();
         if (aukeratutakoErrenkada == -1) {
@@ -245,7 +306,8 @@ public class TaulaKontrolatzailea {
         JOptionPane.showMessageDialog(null, arrakastatsua ? "Erregistroa ezabatuta." : "Akatsa erregistroa ezabatzean.");
         berriroKargatuTaula(taulaIzena);
     }
-    //Taula kargatzeko funtzioa
+
+    // Taula berriro kargatzeko funtzioa
     private void berriroKargatuTaula(String taulaIzena) {
         taula = Kontsulta.lortuTaulenDatuak(taulaIzena);
     }

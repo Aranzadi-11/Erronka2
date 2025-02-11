@@ -9,26 +9,27 @@ public class APP extends JFrame {
     private TaulaKontrolatzailea kontrolatzailea;
     private String mota; // Loginetik jasotako erabiltzaile mota
 
-    //Eraikitzailea
     public APP(String mota) {
         this.mota = mota;
         setTitle("Datu-base kudeaketa");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(150, 150, 850, 500);
+        setSize(850, 500);
+        setLocationRelativeTo(null); //Pantaila erdialdean agertzeko konfigurazioa
 
+        //Panel printzipala sortu
         JPanel edukia = new JPanel(new BorderLayout());
         setContentPane(edukia);
 
-        //Kontrolatzaiea sortu
+        // Taula kontrolatzailea sortu
         kontrolatzailea = new TaulaKontrolatzailea();
 
-        //Menu panel bat sortu eta taulen aukeraketa sortu
+        // Menu laterala sortu eta koloreak ezarri
         MenuPanela menuPanela = new MenuPanela(mota, taulaIzena -> kontrolatzailea.kargatuTaula(taulaIzena, taulaPanela));
+        menuPanela.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         edukia.add(menuPanela, BorderLayout.WEST);
 
-        // Taula eta operazioak erakusteko panela sortu
+        // Menu zentrala sortu taulak bistaratzeko eta beraiekin egin ahal diren akzioak
         taulaPanela = new TaulaPanela();
         edukia.add(taulaPanela, BorderLayout.CENTER);
     }
 }
-

@@ -3,12 +3,15 @@ package erronka2;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
+import javax.swing.JTable;
+
 //Datu Basean egin ahal diren ekintzak konfiguratu funtzioekin.
 public class DBEkintzak {
-
+	
 	//Erregistroak gehitzeko funtzioa 
     public boolean erregistroaGehitu(String taulaIzena, String[] zutabeIzenak, String[] balioak) {
         int kop = zutabeIzenak.length;
+        //INSERT-a egiten da aukeratutako taulan
         StringBuilder sql = new StringBuilder("INSERT INTO " + taulaIzena + " (");
         StringBuilder placeholders = new StringBuilder();
         for (int i = 0; i < kop; i++) {
@@ -36,6 +39,7 @@ public class DBEkintzak {
     public boolean erregistroaEguneratu(String taulaIzena, String idZutabe, String idBalio, 
                                         String[] eguneratuZutabeak, String[] eguneratuBalioak) {
         int kop = eguneratuZutabeak.length;
+      //UPDATE-a egiten da aukeratutako taulan eta ID-aren arabera
         StringBuilder sql = new StringBuilder("UPDATE " + taulaIzena + " SET ");
         for (int i = 0; i < kop; i++) {
             sql.append(eguneratuZutabeak[i]).append(" = ?");
@@ -59,6 +63,7 @@ public class DBEkintzak {
 
     //Erregistroak ezabatzeko funtzioa
     public boolean erregistroaEzabatu(String taulaIzena, String idZutabe, String idBalio) {
+    	//DELETE-a egiten da aukeratutako taule eta ID-aren arabera.
         String sql = "DELETE FROM " + taulaIzena + " WHERE " + idZutabe + " = ?";
         try (Connection konexioa = DBKonexioa.lortuKonexioa();
              PreparedStatement pstmt = konexioa.prepareStatement(sql)) {
@@ -67,6 +72,7 @@ public class DBEkintzak {
         } catch (Exception ex) {
             ex.printStackTrace();
             return false;
+            
         }
     }
 }
