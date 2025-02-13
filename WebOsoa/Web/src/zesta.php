@@ -28,7 +28,7 @@ session_start();
                 if (empty($_SESSION['saskia'])) {
                     echo "<p>Zure saskia hutsik dago.</p>";
                 } else {
-                    // Mostrar los productos en la cesta
+                    
                     foreach ($_SESSION['saskia'] as $item) {
                         echo "<div class='produktua'>";
                         echo "<h3>" . htmlspecialchars($item['izena']) . "</h3>";
@@ -51,9 +51,7 @@ session_start();
 
     <?php
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['garbitu'])) {
-        // Vaciar la cesta
         $_SESSION['saskia'] = [];
-        // Redirigir a la misma página para reflejar el cambio
         echo "<script>
                 window.location.href = 'zesta.php';
             </script>"; 

@@ -1,7 +1,7 @@
 <?php
 include 'dbKonexioa.php';
 
-// Consultar productos desde la base de datos
+
 $sql = "SELECT * FROM stock";
 $emaitza = $conn->query($sql);
 
@@ -12,7 +12,6 @@ if ($emaitza->num_rows > 0) {
         echo "<img src='" . htmlspecialchars($row['Argazkia_URL']) . "' alt='" . htmlspecialchars($row['Izena']) . "' width='200' height='200'>";
         echo "<p>Prezioa: " . htmlspecialchars($row['Prezioa']) . "€</p>";
         
-        // Formulario para agregar el producto a la cesta
         echo "<form method='POST' action='index.php'>
                 <input type='hidden' name='izena' value='" . htmlspecialchars($row['Izena']) . "'>
                 <input type='hidden' name='prezioa' value='" . htmlspecialchars($row['Prezioa']) . "'>

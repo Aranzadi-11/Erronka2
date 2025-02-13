@@ -1,11 +1,23 @@
 <?php
-session_start(); // Asegúrate de iniciar la sesión
-
+session_set_cookie_params(0); // La sesión se eliminará al cerrar el navegador
+session_start();
 include 'dbKonexioa.php';
 
 // Comprobar si ya existe la cesta en la sesión, si no, inicializarla
 if (!isset($_SESSION['saskia'])) {
     $_SESSION['saskia'] = [];
+}
+
+// Si se recibe el formulario para añadir un producto al carrito
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['gehitu'])) {
+    if (!isset($_SESSION['erabiltzailea'])) {
+        header("Location: saioa-hasi.php");
+        exit();
+    }
+    $izena = $_POST['izena'];
+    $prezioa = $_POST['prezioa'];
+    $argazkia = $_POST['Argazkia_URL'];
+    $_SESSION['saskia'][] = ['izena' => $izena, 'prezioa' => $prezioa, 'Argazkia_URL' => $argazkia];
 }
 
 // Filtrado por nombre y precio
@@ -36,6 +48,7 @@ $emaitza = $stmt->get_result();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ABE TECHNOLOGY</title>
     <link rel="stylesheet" href="../public/styles.css">
+    
 </head>
 <body>
     <header>
@@ -48,13 +61,25 @@ $emaitza = $stmt->get_result();
                         <a href="kontaktua.php">Kontaktua</a>
                     </div>
                 </li>
-                
+
                 <li>
-                    <a href="saioa-hasi.php"><img src="../public/login_icon.jpg" id="login-ikonoa" alt="Saioa Hasi" width="50" height="50"></a>
+                    <?php if (isset($_SESSION['erabiltzailea'])): ?>
+                        <span class="erabiltzailea">Ongi etorri, <?php echo htmlspecialchars($_SESSION['erabiltzailea']); ?>!</span>
+                    <?php endif; ?>
+                    
+                    <a href="saioa-hasi.php">
+                        <img src="../public/login_icon.jpg" id="login-ikonoa" alt="Saioa Hasi" width="50" height="50">
+                    </a>
+                    
+                    <?php if (isset($_SESSION['erabiltzailea'])): ?>
+                        <a href="saioa-itxi.php" class="logout-button">Saioa Itxi</a>
+                    <?php endif; ?>
                 </li>
-                
+
                 <li>
-                    <a href="zesta.php"> <img src="../public/carrito.jpg" id="saskia-ikonoa" alt="Saskia" width="50" height="50"></a>
+                    <a href="zesta.php">
+                        <img src="../public/carrito.jpg" id="saskia-ikonoa" alt="Saskia" width="50" height="50">
+                    </a>
                     <span id="saskia-kopurua"><?php echo count($_SESSION['saskia']); ?></span>
                 </li>
             </ul>

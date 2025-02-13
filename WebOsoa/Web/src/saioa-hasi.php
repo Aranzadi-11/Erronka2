@@ -14,6 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($user && password_verify($password, $user['Pasahitza'])) {
         $_SESSION['erabiltzailea'] = $user['Erabiltzailea'];
+        $_SESSION['saskia'] = [];
         header("Location: index.php");
         exit();
     } else {

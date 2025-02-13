@@ -1,5 +1,5 @@
 <?php
-session_start(); // Iniciar sesión al principio
+session_start(); 
 
 if (!isset($_SESSION['saskia'])) {
     $_SESSION['saskia'] = [];
@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $prezioa = $_POST['prezioa'] ?? '';
 
     if (!empty($izena) && !empty($prezioa)) {
-        // Añadir el producto a la cesta
+        
         $_SESSION['saskia'][] = [
             'Izena' => $izena,
             'Argazkia_URL' => $argazkia,
@@ -22,9 +22,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "Errorea: datuak falta dira!";
     }
 }
-
-// Esto es solo para depuración, puede eliminarse después
-echo "<pre>";
-print_r($_SESSION);
-echo "</pre>";
 ?>
