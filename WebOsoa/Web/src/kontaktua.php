@@ -67,20 +67,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </ul>
         </nav>
     </header>
-    <main>
-        <h2><?php echo $translations['Hornitzailea Gehitu']; ?></h2>
-        <?php if (isset($error)) { echo "<p style='color:red;'>$error</p>"; } ?>
-        <form method="POST" action="hornitzailea.php">
-            <label for="enpresaIzena"><?php echo $translations['Enpresa Izena']; ?>:</label>
-            <input type="text" name="enpresaIzena" required>
-            <label for="produktua"><?php echo $translations['Produktua']; ?>:</label>
-            <input type="text" name="produktua" required>
-            <label for="produktuarenDeskripzioa"><?php echo $translations['Produktuaren Deskripzioa']; ?>:</label>
-            <input type="text" name="produktuarenDeskripzioa" required>
-            <label for="dohaintzarenEguna"><?php echo $translations['Dohaintzaren Eguna']; ?>:</label>
-            <input type="date" name="dohaintzarenEguna" required>
-            <button type="submit"><?php echo $translations['Gehitu']; ?></button>
-        </form>
+    <main style="display: flex; justify-content: center; align-items: center; min-height: 80vh;">
+        <div style="max-width: 400px; width: 100%;">
+            <h2><?php echo $translations['Hornitzailea Gehitu']; ?></h2>
+            <?php if (isset($error)) { echo "<p style='color:red;'>$error</p>"; } ?>
+            <form method="POST" action="hornitzailea.php" style="display: flex; flex-direction: column; gap: 15px;">
+                <label for="enpresaIzena" style="font-size: 1.2em;"><?php echo $translations['Enpresa Izena']; ?>:</label>
+                <input type="text" name="enpresaIzena" required style="height: 2em; font-size: 1.1em;">
+                
+                <label for="produktua" style="font-size: 1.2em;"><?php echo $translations['Produktua']; ?>:</label>
+                <input type="text" name="produktua" required style="height: 2em; font-size: 1.1em;">
+                
+                <label for="produktuarenDeskripzioa" style="font-size: 1.2em;"><?php echo $translations['Produktuaren Deskripzioa']; ?>:</label>
+                <input type="text" name="produktuarenDeskripzioa" required style="height: 2em; font-size: 1.1em;">
+                
+                <label for="dohaintzarenEguna" style="font-size: 1.2em;"><?php echo $translations['Dohaintzaren Eguna']; ?>:</label>
+                <input type="date" name="dohaintzarenEguna" required style="height: 2em; font-size: 1.1em;">
+                
+                <button type="submit" id="gehituBotoia" style="font-size: 1.2em;"><?php echo $translations['Gehitu']; ?></button>
+            </form>
+        </div>
+    </main>
+
     </main>
 </body>
 </html>

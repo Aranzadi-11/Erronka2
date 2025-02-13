@@ -3,27 +3,20 @@ session_set_cookie_params(0);
 session_start();
 include 'dbKonexioa.php';
  
-
 define('APP_DIR', __DIR__); 
  
-
 require_once APP_DIR . '/itzulpenak/translations.php';
  
-
 if (isset($_POST['selectedLang'])) {
-
     $valid_languages = ['eus', 'en'];
     $lang = in_array($_POST['selectedLang'], $valid_languages) ? $_POST['selectedLang'] : 'eus';
     $_SESSION["_LANGUAGE"] = $lang;  
 } else {
- 
     $lang = $_SESSION["_LANGUAGE"] ?? 'eus';  
 }
  
-
 $translations = require __DIR__ . "/itzulpenak/" . $lang . ".php";  
  
-
 if (!isset($_SESSION['saskia'])) {
     $_SESSION['saskia'] = [];
 }
@@ -77,21 +70,18 @@ $emaitza = $stmt->get_result();
                     </div>
                 </li>
  
-                
                 <li>
                     <form method="post">
                         <?php if ($lang == 'eus'): ?>
-                           
-                            <button type="submit" name="selectedLang" value="en">
+                            <button type="submit" id="hizkuntza-ikonoa" name="selectedLang" value="en">
                                 <div class="language-flag">
-                                    <img src="../public/uk_flag.png" alt="English" width="50" height="50">
+                                    <img src="../public/uk_flag.png" id="hikuntza-ikonoa" alt="English" width="50" height="50">
                                 </div>
                             </button>
                         <?php else: ?>
-                            
-                            <button type="submit" name="selectedLang" value="eus">
+                            <button type="submit" id="hizkuntza-ikonoa" name="selectedLang" value="eus">
                                 <div class="language-flag">
-                                    <img src="../public/ikurrina.png" alt="Euskera" width="50" height="50">
+                                    <img src="../public/ikurrina.png" id="hizkuntza-ikonoa" alt="Euskera" width="50" height="50">
                                 </div>
                             </button>
                         <?php endif; ?>
@@ -99,19 +89,19 @@ $emaitza = $stmt->get_result();
                 </li>
  
                 <li>
-                    <?php if (isset($_SESSION['erabiltzailea'])): ?>
-                        <span class="erabiltzailea"><?php echo str_replace("{usuario}", htmlspecialchars($_SESSION['erabiltzailea']), trans('Ongi etorri, {usuario}!')); ?></span>
-                    <?php endif; ?>
-                    
                     <a href="saioa-hasi.php">
                         <img src="../public/login_icon.jpg" id="login-ikonoa" alt="Saioa Hasi" width="50" height="50">
                     </a>
-                    
                     <?php if (isset($_SESSION['erabiltzailea'])): ?>
-                        <a href="saioa-itxi.php" class="logout-button"><?php echo trans('Saioa Itxi'); ?></a>
+                        <span class="erabiltzailea"><?php echo str_replace("{usuario}", htmlspecialchars($_SESSION['erabiltzailea']), trans('Ongi etorri, {usuario}!')); ?></span>
                     <?php endif; ?>
-                 </li>
+                </li>
 
+                <?php if (isset($_SESSION['erabiltzailea'])): ?>
+                <li>
+                    <a href="saioa-itxi.php" class="logout-button"><?php echo trans('Saioa Itxi'); ?></a>
+                </li>
+                <?php endif; ?>
  
                 <li>
                     <a href="zesta.php">
@@ -137,7 +127,7 @@ $emaitza = $stmt->get_result();
                     <option value="desc" <?php if ($filtratu == 'desc') echo 'selected'; ?>><?php echo trans('Prezioa: Handienetik txikienera'); ?></option>
                 </select>
  
-                <button type="submit"><?php echo trans('Bilatu'); ?></button>
+                <button id="Bilatu" type="submit"><?php echo trans('Bilatu'); ?></button>
             </form>
            
             <div id="produktuak">
@@ -153,7 +143,7 @@ $emaitza = $stmt->get_result();
                                 <input type='hidden' name='izena' value='" . htmlspecialchars($row['Izena']) . "'>
                                 <input type='hidden' name='prezioa' value='" . htmlspecialchars($row['Prezioa']) . "'>
                                 <input type='hidden' name='Argazkia_URL' value='" . htmlspecialchars($row['Argazkia_URL']) . "'>
-                                <button type='submit' name='gehitu'>" . trans('Gehitu Saskira') . "</button>
+                                <button type='submit'id='gehituSaskira' name='gehitu'>" . trans('Gehitu Saskira') . "</button>
                               </form>";
                         echo "</div>";
                     }

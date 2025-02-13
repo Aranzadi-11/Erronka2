@@ -114,8 +114,8 @@ $translations = require __DIR__ . "/itzulpenak/" . $lang . ".php";
       }
       ?>
       <form method="POST">
-        <button class="garbitu-btn" type="submit" name="garbitu"><?php echo $translations['Saskia Garbitu']; ?></button>
-        <button class="erosi-btn" type="submit" name="erosi"><?php echo $translations['Erosi']; ?></button>
+        <button class="garbitu-btn" id="garbituBotoia" type="submit" name="garbitu"><?php echo $translations['Saskia Garbitu']; ?></button>
+        <button class="erosi-btn" id="erosiBotoia" type="submit" name="erosi"><?php echo $translations['Erosi']; ?></button>
       </form>
     </section>
   </main>
