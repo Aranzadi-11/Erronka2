@@ -1,0 +1,10 @@
+body {
+    margin: 0;
+}
+.grid {
+    display: grid;
+}
+
+.header {
+    background-color: lightblue;
+}
