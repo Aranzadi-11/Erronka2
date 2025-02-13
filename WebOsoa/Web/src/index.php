@@ -8,17 +8,25 @@ if (!isset($_SESSION['saskia'])) {
     $_SESSION['saskia'] = [];
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['gehitu'])) {
-    if (!isset($_SESSION['erabiltzailea'])) {
-        header("Location: saioa-hasi.php");
-        exit();
-    }
-    $izena = $_POST['izena'];
-    $prezioa = $_POST['prezioa'];
-    $argazkia = $_POST['Argazkia_URL'];
-    $_SESSION['saskia'][] = ['izena' => $izena, 'prezioa' => $prezioa, 'Argazkia_URL' => $argazkia];
+// Filtrado por nombre y precio
+$bilatu = isset($_GET['bilatu']) ? $_GET['bilatu'] : '';
+$filtratu = isset($_GET['filtratu']) ? $_GET['filtratu'] : '';
+
+// Construir la consulta SQL según los filtros seleccionados
+$sql = "SELECT * FROM stock WHERE Izena LIKE ?";
+$params = ["%$bilatu%"];
+
+if ($filtratu == 'asc') {
+    $sql .= " ORDER BY Prezioa ASC";
+} elseif ($filtratu == 'desc') {
+    $sql .= " ORDER BY Prezioa DESC";
 }
 
+// Preparar y ejecutar la consulta
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $params[0]);
+$stmt->execute();
+$emaitza = $stmt->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -28,7 +36,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['gehitu'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ABE TECHNOLOGY</title>
     <link rel="stylesheet" href="../public/styles.css">
-    <script src="script.js" defer></script>
 </head>
 <body>
     <header>
@@ -57,26 +64,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['gehitu'])) {
     <main>
         <section>
             <h2>Denda Informatikoa</h2>
-            <label for="filtratu">Filtratu:</label>
-            <select id="filtratu">
-                <option value="izena">Izena</option>
-                <option value="prezioa">Prezioa</option>
-            </select>
-            <div id="produktuak">
-                <?php include 'produktuak.php'; ?>
-            </div>
-        </section>
+            <form method="GET" action="index.php">
+                <label for="bilatu">Bilatu izenaren arabera:</label>
+                <input type="text" id="bilatu" name="bilatu" placeholder="Produktuaren izena" value="<?php echo htmlspecialchars($bilatu); ?>">
 
-        <div id="saskia-popup" class="saskia-gordea">
-            <ul id="saskia-zerrenda">
+                <label for="filtratu">Filtratu prezioaren arabera:</label>
+                <select id="filtratu" name="filtratu">
+                    <option value="">Aukeratu</option>
+                    <option value="asc" <?php if ($filtratu == 'asc') echo 'selected'; ?>>Prezioa: Txikienetik handienera</option>
+                    <option value="desc" <?php if ($filtratu == 'desc') echo 'selected'; ?>>Prezioa: Handienetik txikienera</option>
+                </select>
+
+                <button type="submit">Bilatu</button>
+            </form>
+            
+            <div id="produktuak">
                 <?php
-                // Mostrar los productos en la cesta
-                foreach ($_SESSION['saskia'] as $item) {
-                    echo "<li>{$item['izena']} - {$item['prezioa']}€</li>";
+                // Mostrar los productos filtrados
+                if ($emaitza->num_rows > 0) {
+                    while ($row = $emaitza->fetch_assoc()) {
+                        echo "<div class='produktua'>";
+                        echo "<h3>" . htmlspecialchars($row['Izena']) . "</h3>";
+                        echo "<img src='" . htmlspecialchars($row['Argazkia_URL']) . "' alt='" . htmlspecialchars($row['Izena']) . "' width='200' height='200'>";
+                        echo "<p>Prezioa: " . htmlspecialchars($row['Prezioa']) . "€</p>";
+                        
+                        // Formulario para agregar el producto a la cesta
+                        echo "<form method='POST' action='index.php'>
+                                <input type='hidden' name='izena' value='" . htmlspecialchars($row['Izena']) . "'>
+                                <input type='hidden' name='prezioa' value='" . htmlspecialchars($row['Prezioa']) . "'>
+                                <input type='hidden' name='Argazkia_URL' value='" . htmlspecialchars($row['Argazkia_URL']) . "'>
+                                <button type='submit' name='gehitu'>Gehitu Saskira</button>
+                              </form>";
+                        echo "</div>";
+                    }
+                } else {
+                    echo "<p>Ez dago produkturik zure irizpideekin.</p>";
                 }
                 ?>
-            </ul>
-        </div>
+            </div>
+        </section>
     </main>
 
     <footer>
@@ -84,3 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['gehitu'])) {
     </footer>
 </body>
 </html>
+
+<?php
+$conn->close(); // Cerrar la conexión
+?>
