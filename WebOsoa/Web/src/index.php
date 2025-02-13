@@ -1,14 +1,13 @@
 <?php
-session_set_cookie_params(0); // La sesión se eliminará al cerrar el navegador
+session_set_cookie_params(0); 
 session_start();
 include 'dbKonexioa.php';
 
-// Comprobar si ya existe la cesta en la sesión, si no, inicializarla
+
 if (!isset($_SESSION['saskia'])) {
     $_SESSION['saskia'] = [];
 }
 
-// Si se recibe el formulario para añadir un producto al carrito
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['gehitu'])) {
     if (!isset($_SESSION['erabiltzailea'])) {
         header("Location: saioa-hasi.php");
@@ -20,11 +19,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['gehitu'])) {
     $_SESSION['saskia'][] = ['izena' => $izena, 'prezioa' => $prezioa, 'Argazkia_URL' => $argazkia];
 }
 
-// Filtrado por nombre y precio
 $bilatu = isset($_GET['bilatu']) ? $_GET['bilatu'] : '';
 $filtratu = isset($_GET['filtratu']) ? $_GET['filtratu'] : '';
 
-// Construir la consulta SQL según los filtros seleccionados
 $sql = "SELECT * FROM stock WHERE Izena LIKE ?";
 $params = ["%$bilatu%"];
 
@@ -34,7 +31,6 @@ if ($filtratu == 'asc') {
     $sql .= " ORDER BY Prezioa DESC";
 }
 
-// Preparar y ejecutar la consulta
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $params[0]);
 $stmt->execute();
@@ -105,7 +101,7 @@ $emaitza = $stmt->get_result();
             
             <div id="produktuak">
                 <?php
-                // Mostrar los productos filtrados
+               
                 if ($emaitza->num_rows > 0) {
                     while ($row = $emaitza->fetch_assoc()) {
                         echo "<div class='produktua'>";
@@ -113,7 +109,7 @@ $emaitza = $stmt->get_result();
                         echo "<img src='" . htmlspecialchars($row['Argazkia_URL']) . "' alt='" . htmlspecialchars($row['Izena']) . "' width='200' height='200'>";
                         echo "<p>Prezioa: " . htmlspecialchars($row['Prezioa']) . "€</p>";
                         
-                        // Formulario para agregar el producto a la cesta
+                        
                         echo "<form method='POST' action='index.php'>
                                 <input type='hidden' name='izena' value='" . htmlspecialchars($row['Izena']) . "'>
                                 <input type='hidden' name='prezioa' value='" . htmlspecialchars($row['Prezioa']) . "'>
@@ -137,5 +133,5 @@ $emaitza = $stmt->get_result();
 </html>
 
 <?php
-$conn->close(); // Cerrar la conexión
+$conn->close();
 ?>
