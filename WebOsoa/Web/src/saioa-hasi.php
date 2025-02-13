@@ -2,34 +2,34 @@
 session_start();
 include 'dbKonexioa.php';
 
-// Definir APP_DIR si no está definida previamente
+
 if (!defined('APP_DIR')) {
-    define('APP_DIR', __DIR__);  // Define APP_DIR con el directorio actual
+    define('APP_DIR', __DIR__);  
 }
 
-// Incluir la función de traducción (asegúrate de que este archivo contenga la función trans)
+
 require_once APP_DIR . '/itzulpenak/translations.php';
 
-// Verificar si el idioma fue enviado desde el formulario
+
 if (isset($_POST['selectedLang'])) {
-    // Validar que el idioma seleccionado es uno válido
+
     $valid_languages = ['eus', 'en'];
-    $lang = in_array($_POST['selectedLang'], $valid_languages) ? $_POST['selectedLang'] : 'eus'; // Por defecto 'eus' si no es válido
-    $_SESSION["_LANGUAGE"] = $lang;  // Guardamos el idioma seleccionado en la sesión
+    $lang = in_array($_POST['selectedLang'], $valid_languages) ? $_POST['selectedLang'] : 'eus'; 
+    $_SESSION["_LANGUAGE"] = $lang;  
 } else {
-    // Si no se ha enviado ningún idioma desde el formulario, usamos el que está en la sesión
-    $lang = $_SESSION["_LANGUAGE"] ?? 'eus';  // Valor por defecto es 'eus'
+
+    $lang = $_SESSION["_LANGUAGE"] ?? 'eus';  
 }
 
-// Cargar traducciones
-$translations = require __DIR__ . "/itzulpenak/" . $lang . ".php";  // Cargar el archivo de traducción según el idioma
 
-$error = ''; // Variable para mensajes de error
+$translations = require __DIR__ . "/itzulpenak/" . $lang . ".php"; 
+
+$error = ''; 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['selectedLang'])) {
-    // Solo procesamos el login si no se ha enviado el cambio de idioma
+   
 
-    // Verificar si 'username' y 'password' están definidos en el formulario
+ 
     if (isset($_POST['username']) && isset($_POST['password']) && !empty($_POST['username']) && !empty($_POST['password'])) {
         $username = $_POST['username'];
         $password = $_POST['password'];
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['selectedLang'])) {
 
         if ($user && password_verify($password, $user['Pasahitza'])) {
             $_SESSION['erabiltzailea'] = $user['Erabiltzailea'];
-            $_SESSION['saskia'] = [];  // Limpiar el carrito
+            $_SESSION['saskia'] = [];  
             header("Location: index.php");
             exit();
         } else {

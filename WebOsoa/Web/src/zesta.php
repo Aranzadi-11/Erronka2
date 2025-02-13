@@ -1,30 +1,67 @@
 <?php
 session_start();
-include 'dbKonexioa.php'; 
+include 'dbKonexioa.php';
+
+
+if (!defined('APP_DIR')) {
+  define('APP_DIR', __DIR__);  
+}
+
+
+require_once APP_DIR . '/itzulpenak/translations.php';
+
+
+if (isset($_POST['selectedLang'])) {
+
+  $valid_languages = ['eus', 'en'];
+  $lang = in_array($_POST['selectedLang'], $valid_languages) ? $_POST['selectedLang'] : 'eus'; 
+  $_SESSION["_LANGUAGE"] = $lang;  
+} else {
+ 
+  $lang = $_SESSION["_LANGUAGE"] ?? 'eus';  
+}
+
+
+$translations = require __DIR__ . "/itzulpenak/" . $lang . ".php";  
 ?>
 <!DOCTYPE html>
 <html lang="eu">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Zure Saskia</title>
+  <title><?php echo $translations['Zure Saskia']; ?></title>
   <link rel="stylesheet" href="../public/styles.css">
 </head>
 <body>
   <header>
-    <h1>Zure Saskia</h1>
+    <h1><?php echo $translations['Zure Saskia']; ?></h1>
     <nav>
       <ul>
-        <li><a href="index.php">Hasiera</a></li>
+        <li><a href="index.php"><?php echo $translations['Hasiera']; ?></a></li>
       </ul>
     </nav>
+    <form method="post">
+        <?php if ($lang == 'eus'): ?>
+            <button type="submit" name="selectedLang" value="en">
+                <div class="language-flag">
+                    <img src="../public/uk_flag.png" alt="English" width="50" height="50">
+                </div>
+            </button>
+        <?php else: ?>
+            <button type="submit" name="selectedLang" value="eus">
+                <div class="language-flag">
+                    <img src="../public/ikurrina.png" alt="Euskera" width="50" height="50">
+                </div>
+            </button>
+        <?php endif; ?>
+    </form>
   </header>
   <main>
     <section>
-      <h2>Saskian dauden produktuak</h2>
+      <h2><?php echo $translations['Saskian dauden produktuak']; ?></h2>
       <?php
       if(empty($_SESSION['saskia'])){
-          echo "<p>Zure saskia hutsik dago.</p>";
+          echo "<p>" . $translations['Zure saskia hutsik dago.'] . "</p>";
       } else {
           $productosAgrupados = [];
           foreach($_SESSION['saskia'] as $item){
@@ -41,10 +78,10 @@ include 'dbKonexioa.php';
           <table>
             <thead>
               <tr>
-                <th>Argazkia</th>
-                <th>Izena</th>
-                <th>Kopurua</th>
-                <th>Prezioa (kopurua × prezioa)</th>
+                <th><?php echo $translations['Argazkia']; ?></th>
+                <th><?php echo $translations['Izena']; ?></th>
+                <th><?php echo $translations['Kopurua']; ?></th>
+                <th><?php echo $translations['Prezioa']; ?></th>
               </tr>
             </thead>
             <tbody>
@@ -57,7 +94,7 @@ include 'dbKonexioa.php';
                     <?php if(isset($producto['Argazkia_URL'])): ?>
                       <img src="<?php echo htmlspecialchars($producto['Argazkia_URL']); ?>" alt="<?php echo htmlspecialchars($producto['izena']); ?>">
                     <?php else: ?>
-                      <p>Argazkia ez dago</p>
+                      <p><?php echo $translations['Argazkia ez dago']; ?></p>
                     <?php endif; ?>
                   </td>
                   <td><?php echo htmlspecialchars($producto['izena']); ?></td>
@@ -68,7 +105,7 @@ include 'dbKonexioa.php';
             </tbody>
             <tfoot>
               <tr>
-                <td colspan="3" style="text-align:right;">Guztira:</td>
+                <td colspan="3" style="text-align:right;"><?php echo $translations['Guztira']; ?>:</td>
                 <td><?php echo number_format($totalGeneral,2,',','.'); ?>€</td>
               </tr>
             </tfoot>
@@ -77,8 +114,8 @@ include 'dbKonexioa.php';
       }
       ?>
       <form method="POST">
-        <button class="garbitu-btn" type="submit" name="garbitu">Saskia Garbitu</button>
-        <button class="erosi-btn" type="submit" name="erosi">Erosi</button>
+        <button class="garbitu-btn" type="submit" name="garbitu"><?php echo $translations['Saskia Garbitu']; ?></button>
+        <button class="erosi-btn" type="submit" name="erosi"><?php echo $translations['Erosi']; ?></button>
       </form>
     </section>
   </main>
@@ -88,7 +125,6 @@ include 'dbKonexioa.php';
       echo "<script>window.location.href = 'zesta.php';</script>";
   }
 
-  // Logika erosketarako
   if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['erosi'])){
       if(!empty($_SESSION['saskia'])){
           $erabiltzailea = $_SESSION['erabiltzailea'];

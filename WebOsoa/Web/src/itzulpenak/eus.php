@@ -2,21 +2,22 @@
 
 //index
 return [
-        'Aukeratu' => 'Aukeratu',
-        'Prezioa: Txikienetik handienera' => 'Prezioa: Txikienetik handienera',
-        'Prezioa: Handienetik txikienera' => 'Prezioa: Handienetik txikienera',
-        'Bilatu izenaren arabera' => 'Bilatu izenaren arabera',
-        'Produktuaren izena' => 'Produktuaren izena',
-        'Filtratu prezioaren arabera' => 'Filtratu prezioaren arabera',
-        'Bilatu' => 'Bilatu',
-        'Ez dago produkturik zure irizpideekin.' => 'Ez dago produkturik zure irizpideekin.',
-        'Gehitu Saskira' => 'Gehitu Saskira',
-        'Prezioa' => 'Prezioa',
-        'Menu' => 'Menu',
-        'Contact' => 'Kontaktua',
-        'ABE TECHNOLOGY' => 'ABE TECHNOLOGY',
-        'Eskubide gustiak erreserbatuta' => 'Eskubide gustiak erreserbatuta',
-    
+    'Aukeratu' => 'Aukeratu',
+    'Prezioa: Txikienetik handienera' => 'Prezioa: Txikienetik handienera',
+    'Prezioa: Handienetik txikienera' => 'Prezioa: Handienetik txikienera',
+    'Bilatu izenaren arabera' => 'Bilatu izenaren arabera',
+    'Produktuaren izena' => 'Produktuaren izena',
+    'Filtratu prezioaren arabera' => 'Filtratu prezioaren arabera',
+    'Bilatu' => 'Bilatu',
+    'Ez dago produkturik zure irizpideekin.' => 'Ez dago produkturik zure irizpideekin.',
+    'Gehitu Saskira' => 'Gehitu Saskira',
+    'Prezioa' => 'Prezioa',
+    'Menu' => 'Menu',
+    'Contact' => 'Kontaktua',
+    'ABE TECHNOLOGY' => 'ABE TECHNOLOGY',
+    'Eskubide gustiak erreserbatuta' => 'Eskubide gustiak erreserbatuta',
+    'Ongi etorri, {usuario}!' => 'Ongi etorri, {usuario}!',
+    'Saioa Itxi' => 'Saioa Itxi',
 
     //erregistroa
     'Erregistroa' => 'Erregistroa',
@@ -63,5 +64,36 @@ return [
     'Produktua' => 'Produktua',
     'Desconocido' => 'Desconocido',
     'Error al agregar el producto' => 'Errore bat gertatu da produktua gehitzeko.',
-    'Producto agregado al carrito' => 'Produktua saskira gehitu da.'
+    'Producto agregado al carrito' => 'Produktua saskira gehitu da.',
+
+    //saskia
+    'Zure Saskia' => 'Zure Saskia',
+    'Hasiera' => 'Hasiera',
+    'Saskian dauden produktuak' => 'Saskian dauden produktuak',
+    'Zure saskia hutsik dago.' => 'Zure saskia hutsik dago.',
+    'Argazkia' => 'Argazkia',
+    'Izena' => 'Izena',
+    'Kopurua' => 'Kopurua',
+    'Prezioa' => 'Prezioa',
+    'Argazkia ez dago' => 'Argazkia ez dago',
+    'Guztira' => 'Guztira',
+    'Saskia Garbitu' => 'Saskia Garbitu',
+    'Erosi' => 'Erosi',
+    'Erosketa arrakastatsua izan da!' => 'Erosketa arrakastatsua izan da!',
+
+    //kontaktua
+    'Hornitzaileak Kudeatu' => 'Hornitzaileak Kudeatu',
+    'Hornitzaileak' => 'Hornitzaileak',
+    'Hasiera' => 'Hasiera',
+    'Produktuak' => 'Produktuak',
+    'Log Out' => 'Log Out',
+    'Hornitzailea Gehitu' => 'Hornitzailea Gehitu',
+    'Enpresa Izena' => 'Enpresa Izena',
+    'Produktua' => 'Produktua',
+    'Produktuaren Deskripzioa' => 'Produktuaren Deskripzioa',
+    'Dohaintzaren Eguna' => 'Dohaintzaren Eguna',
+    'Datu guztiak beharrezkoak dira.' => 'Datu guztiak beharrezkoak dira.',
+    'Gehitu' => 'Gehitu',
+    'Errore bat gertatu da produktua gehitzeko.' => 'Errore bat gertatu da produktua gehitzeko.',
+    'Produktua saskira gehitu da!' => 'Produktua saskira gehitu da!'
 ];

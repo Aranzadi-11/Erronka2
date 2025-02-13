@@ -1,5 +1,5 @@
 <form method="post">
-    <select name="selectedLang" onchange="this.form.submit()"> <!-- Añadimos el evento 'onchange' para enviar automáticamente el formulario al seleccionar un idioma -->
+    <select name="selectedLang" onchange="this.form.submit()">
         <option value="en" <?php
             if (isset($_POST["selectedLang"]) && $_POST["selectedLang"] == "en") {
                 echo "selected";
@@ -16,5 +16,5 @@
             }
         ?>>EUS</option>
     </select>
-    <!-- Botón 'Aldatu' ya no es necesario porque el formulario se enviará automáticamente cuando el usuario cambie el idioma -->
+    
 </form>

@@ -17,6 +17,8 @@ return [
     'Contact' => 'Contact',
     'ABE TECHNOLOGY' => 'ABE TECHNOLOGY',
     'Eskubide gustiak erreserbatuta' => 'All rights reserved',
+    'Ongi etorri, {usuario}!' => 'Welcome, {usuario}!',
+    'Saioa Itxi' => 'Logout',
 
     //erregistroa
     'Erregistroa' => 'Registration',
@@ -64,7 +66,39 @@ return [
     'Produktua' => 'Product',
     'Desconocido' => 'Unknown',
     'Error al agregar el producto' => 'Error adding product.',
-    'Producto agregado al carrito' => 'Product added to cart.'
+    'Producto agregado al carrito' => 'Product added to cart.',
+
+    //saskia
+    'Zure Saskia' => 'Your Basket',
+    'Hasiera' => 'Home',
+    'Saskian dauden produktuak' => 'Products in the Basket',
+    'Zure saskia hutsik dago.' => 'Your basket is empty.',
+    'Argazkia' => 'Image',
+    'Izena' => 'Name',
+    'Kopurua' => 'Quantity',
+    'Prezioa' => 'Price',
+    'Argazkia ez dago' => 'Image not available',
+    'Guztira' => 'Total',
+    'Saskia Garbitu' => 'Clear Basket',
+    'Erosi' => 'Buy',
+    'Erosketa arrakastatsua izan da!' => 'Purchase successful!',
+
+    //Kontaktua
+    'Hornitzaileak Kudeatu' => 'Manage Suppliers',
+    'Hornitzaileak' => 'Suppliers',
+    'Hasiera' => 'Home',
+    'Produktuak' => 'Products',
+    'Log Out' => 'Log Out',
+    'Hornitzailea Gehitu' => 'Add Supplier',
+    'Enpresa Izena' => 'Company Name',
+    'Produktua' => 'Product',
+    'Produktuaren Deskripzioa' => 'Product Description',
+    'Dohaintzaren Eguna' => 'Donation Date',
+    'Datu guztiak beharrezkoak dira.' => 'All fields are required.',
+    'Gehitu' => 'Add',
+    'Errore bat gertatu da produktua gehitzeko.' => 'An error occurred while adding the product.',
+    'Produktua saskira gehitu da!' => 'Product added to cart!'
+
 ];
 
 
