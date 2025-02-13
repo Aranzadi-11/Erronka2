@@ -1,5 +1,6 @@
 <?php
 session_start();
+include 'dbKonexioa.php'; 
 ?>
 <!DOCTYPE html>
 <html lang="eu">
@@ -77,6 +78,7 @@ session_start();
       ?>
       <form method="POST">
         <button class="garbitu-btn" type="submit" name="garbitu">Saskia Garbitu</button>
+        <button class="erosi-btn" type="submit" name="erosi">Erosi</button>
       </form>
     </section>
   </main>
@@ -84,6 +86,43 @@ session_start();
   if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['garbitu'])){
       $_SESSION['saskia'] = [];
       echo "<script>window.location.href = 'zesta.php';</script>";
+  }
+
+  // Logika erosketarako
+  if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['erosi'])){
+      if(!empty($_SESSION['saskia'])){
+          $erabiltzailea = $_SESSION['erabiltzailea'];
+          $queryErabiltzaile = "SELECT ID FROM erabiltzaileak WHERE Erabiltzailea = ?";
+          $stmt = $conn->prepare($queryErabiltzaile);
+          $stmt->bind_param("s", $erabiltzailea);
+          $stmt->execute();
+          $result = $stmt->get_result();
+          $row = $result->fetch_assoc();
+          $idErabiltzailea = $row['ID'];
+
+          foreach($productosAgrupados as $producto){
+              $izena = $producto['izena'];
+              $queryProduktua = "SELECT ID FROM stock WHERE Izena = ?";
+              $stmt = $conn->prepare($queryProduktua);
+              $stmt->bind_param("s", $izena);
+              $stmt->execute();
+              $result = $stmt->get_result();
+              $row = $result->fetch_assoc();
+              $idProduktua = $row['ID'];
+
+              $kantitatea = $producto['cantidad'];
+              $prezioa = floatval($producto['prezioa']) * $kantitatea;
+              $data = date('Y-m-d');
+
+              $queryInsert = "INSERT INTO eskaerak (ID_Erabiltzailea, ID_Produktua, Eskaera_Data, Kantitatea, Prezioa) VALUES (?, ?, ?, ?, ?)";
+              $stmt = $conn->prepare($queryInsert);
+              $stmt->bind_param("iisid", $idErabiltzailea, $idProduktua, $data, $kantitatea, $prezioa);
+              $stmt->execute();
+          }
+
+          $_SESSION['saskia'] = [];
+          echo "<script>alert('Erosketa arrakastatsua izan da!'); window.location.href = 'zesta.php';</script>";
+      }
   }
   ?>
   <footer>
