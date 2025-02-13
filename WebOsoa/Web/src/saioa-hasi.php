@@ -2,46 +2,113 @@
 session_start();
 include 'dbKonexioa.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+// Definir APP_DIR si no está definida previamente
+if (!defined('APP_DIR')) {
+    define('APP_DIR', __DIR__);  // Define APP_DIR con el directorio actual
+}
 
-    
-    $sql = "SELECT * FROM erabiltzaileak WHERE Erabiltzailea = :Erabiltzailea";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute(['Erabiltzailea' => $username]);
-    $user = $stmt->fetch();
+// Incluir la función de traducción (asegúrate de que este archivo contenga la función trans)
+require_once APP_DIR . '/itzulpenak/translations.php';
 
-    if ($user && password_verify($password, $user['Pasahitza'])) {
-        $_SESSION['erabiltzailea'] = $user['Erabiltzailea'];
-        $_SESSION['saskia'] = [];
-        header("Location: index.php");
-        exit();
+// Verificar si el idioma fue enviado desde el formulario
+if (isset($_POST['selectedLang'])) {
+    // Validar que el idioma seleccionado es uno válido
+    $valid_languages = ['eus', 'en'];
+    $lang = in_array($_POST['selectedLang'], $valid_languages) ? $_POST['selectedLang'] : 'eus'; // Por defecto 'eus' si no es válido
+    $_SESSION["_LANGUAGE"] = $lang;  // Guardamos el idioma seleccionado en la sesión
+} else {
+    // Si no se ha enviado ningún idioma desde el formulario, usamos el que está en la sesión
+    $lang = $_SESSION["_LANGUAGE"] ?? 'eus';  // Valor por defecto es 'eus'
+}
+
+// Cargar traducciones
+$translations = require __DIR__ . "/itzulpenak/" . $lang . ".php";  // Cargar el archivo de traducción según el idioma
+
+$error = ''; // Variable para mensajes de error
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['selectedLang'])) {
+    // Solo procesamos el login si no se ha enviado el cambio de idioma
+
+    // Verificar si 'username' y 'password' están definidos en el formulario
+    if (isset($_POST['username']) && isset($_POST['password']) && !empty($_POST['username']) && !empty($_POST['password'])) {
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+
+        $sql = "SELECT * FROM erabiltzaileak WHERE Erabiltzailea = :Erabiltzailea";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(['Erabiltzailea' => $username]);
+        $user = $stmt->fetch();
+
+        if ($user && password_verify($password, $user['Pasahitza'])) {
+            $_SESSION['erabiltzailea'] = $user['Erabiltzailea'];
+            $_SESSION['saskia'] = [];  // Limpiar el carrito
+            header("Location: index.php");
+            exit();
+        } else {
+            $error = isset($translations['Erabiltzaile izena edo pasahitza okerrak.']) ? $translations['Erabiltzaile izena edo pasahitza okerrak.'] : 'Error de autenticación.';
+        }
     } else {
-        $error = "Erabiltzaile izena edo pasahitza okerrak.";
+        $error = isset($translations['All fields are required.']) ? $translations['All fields are required.'] : 'Por favor, complete ambos campos.';
     }
 }
 ?>
 
 <!DOCTYPE html>
-<html lang="eu">
+<html lang="<?php echo $lang; ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saioa Hasi</title>
+    <title><?php echo trans('Login'); ?></title>
     <link rel="stylesheet" href="../public/styles.css">
 </head>
 <body>
-    <h2>Saioa Hasi</h2>
-    <?php if (isset($error)) { echo "<p style='color: black;'>$error</p>"; } ?>
-    <form action="saioa-hasi.php" method="POST">
-        <label for="username">Erabiltzaile izena:</label>
-        <input type="text" id="username" name="username" required><br>
-        <label for="password">Pasahitza:</label>
-        <input type="password" id="password" name="password" required><br>
-        <button type="submit">Saioa Hasi</button>
-    </form>
-    <p>Ez daukazu konturik? <a href="erregistroa.php">Erregistratu hemen</a></p>
-    <p><a href="index.php">Itzuli hasierako orrira</a></p>
+<header>
+    <h1><?php echo trans('ABE TECHNOLOGY'); ?></h1>
+    <nav>
+        <ul>
+            <li class="dropdown">
+                <a href="#" class="dropbtn"><?php echo trans('Menu'); ?></a>
+                <div class="dropdown-content">
+                    <a href="kontaktua.php"><?php echo trans('Contact'); ?></a>
+                </div>
+            </li>
+            <li>
+                <form method="post">
+                    <?php if ($lang == 'eus'): ?>
+                        <button type="submit" name="selectedLang" value="en">
+                            <div class="language-flag">
+                                <img src="../public/uk_flag.png" alt="English" width="50" height="50">
+                            </div>
+                        </button>
+                    <?php else: ?>
+                        <button type="submit" name="selectedLang" value="eus">
+                            <div class="language-flag">
+                                <img src="../public/ikurrina.png" alt="Euskera" width="50" height="50">
+                            </div>
+                        </button>
+                    <?php endif; ?>
+                </form>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<h2><?php echo trans('Login'); ?></h2>
+
+<?php if (!empty($error)) { echo "<p style='color: black;'>$error</p>"; } ?>
+
+<form action="saioa-hasi.php" method="POST">
+    <label for="username"><?php echo trans('Username'); ?>:</label>
+    <input type="text" id="username" name="username" required><br>
+    
+    <label for="password"><?php echo trans('Password'); ?>:</label>
+    <input type="password" id="password" name="password" required><br>
+    
+    <button type="submit"><?php echo trans('Login'); ?></button>
+</form>
+
+<p><?php echo trans('Already have an account?'); ?> <a href="erregistroa.php"><?php echo trans('Login here'); ?></a></p>
+<p><a href="index.php"><?php echo trans('Back to homepage'); ?></a></p>
+
 </body>
 </html>
