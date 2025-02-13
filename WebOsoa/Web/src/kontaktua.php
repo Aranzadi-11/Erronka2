@@ -4,24 +4,19 @@ include 'dbKonexioa.php';
 
 if (!defined('APP_DIR')) {
     define('APP_DIR', __DIR__);  
-  }
+}
   
-
-  require_once APP_DIR . '/itzulpenak/translations.php';
+require_once APP_DIR . '/itzulpenak/translations.php';
   
-
-  if (isset($_POST['selectedLang'])) {
- 
+if (isset($_POST['selectedLang'])) {
     $valid_languages = ['eus', 'en'];
     $lang = in_array($_POST['selectedLang'], $valid_languages) ? $_POST['selectedLang'] : 'eus'; 
     $_SESSION["_LANGUAGE"] = $lang; 
-  } else {
- 
+} else {
     $lang = $_SESSION["_LANGUAGE"] ?? 'eus';
-  }
+}
   
-
-  $translations = require __DIR__ . "/itzulpenak/" . $lang . ".php"; 
+$translations = require __DIR__ . "/itzulpenak/" . $lang . ".php"; 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $enpresaIzena = $_POST['enpresaIzena'];
@@ -49,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <!DOCTYPE html>
-<html lang="eu">
+<html lang="<?php echo $lang; ?>">
 <head>
     <meta charset="UTF-8"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -59,6 +54,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <header>
         <h1><?php echo $translations['Hornitzaileak']; ?></h1>
+        <div class="menu-icon">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
         <nav>
             <ul>
                 <li><a href="index.php"><?php echo $translations['Hasiera']; ?></a></li>
@@ -88,7 +88,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
         </div>
     </main>
-
-    </main>
+    <footer>
+        <p>&copy; ABE TECHNOLOGY - <?php echo $translations['Eskubide gustiak erreserbatuta']; ?></p>
+    </footer>
+    <script src="menu.js"></script>
 </body>
 </html>

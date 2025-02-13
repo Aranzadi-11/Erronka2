@@ -61,6 +61,11 @@ $emaitza = $stmt->get_result();
 <body>
     <header>
         <h1><?php echo trans('ABE TECHNOLOGY'); ?></h1>
+        <div class="menu-icon">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
         <nav>
             <ul>
                 <li class="dropdown">
@@ -158,6 +163,7 @@ $emaitza = $stmt->get_result();
     <footer>
         <p>&copy; ABE TECHNOLOGY - <?php echo trans('Eskubide gustiak erreserbatuta'); ?></p>
     </footer>
+    <script src="menu.js"></script>
 </body>
 </html>
  

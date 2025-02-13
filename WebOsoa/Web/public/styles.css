@@ -162,7 +162,7 @@ footer {
         cursor: pointer;
         position: absolute;
         top: 20px;
-        right: 20px;
+        left: 20px;
     }
     .menu-icon .bar {
         width: 25px;
@@ -171,33 +171,53 @@ footer {
         margin: 4px 0;
         transition: 0.4s;
     }
-    #menu {
-        position: absolute;
-        top: 60px;
-        right: 20px;
-        background: rgba(0,0,0,0.8);
-        flex-direction: column;
-        width: 200px;
-        padding: 15px;
-        border-radius: 5px;
+    nav {
         display: none;
+        flex-direction: column;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 250px;
+        background: rgba(0,0,0,0.9);
+        padding: 60px 20px;
+        transition: transform 0.3s ease;
+        transform: translateX(-100%);
         z-index: 1000;
     }
-    #menu.active {
+    nav.active {
+        display: flex;
+        transform: translateX(0);
+    }
+    nav ul {
         display: block;
     }
-    #menu li {
-        margin: 10px 0;
+    nav ul li {
+        display: block;
+        margin: 20px 0;
     }
-    #menu a {
-        color: white;
-        text-decoration: none;
-        font-size: 1.2em;
+    nav ul li a {
+        font-size: 1.5em;
+    }
+    main {
         padding: 10px;
-        display: block;
     }
-    #menu a:hover {
-        background-color: #555;
+    table {
+        margin-top: 10px;
+    }
+    th, td {
+        padding: 10px;
+    }
+    td img {
+        max-width: 80px;
+    }
+    tfoot tr td {
+        padding-top: 10px;
+    }
+    .garbitu-btn {
+        margin: 10px auto;
+        padding: 8px 16px;
+        font-size: 0.9em;
     }
 }
 main section {
@@ -294,5 +314,4 @@ tfoot tr td {
         padding: 8px 16px;
         font-size: 0.9em;
     }
-    
 }

@@ -2,34 +2,25 @@
 session_start();
 include 'dbKonexioa.php';
 
-
 if (!defined('APP_DIR')) {
     define('APP_DIR', __DIR__);  
 }
 
-
 require_once APP_DIR . '/itzulpenak/translations.php';
 
-
 if (isset($_POST['selectedLang'])) {
-
     $valid_languages = ['eus', 'en'];
     $lang = in_array($_POST['selectedLang'], $valid_languages) ? $_POST['selectedLang'] : 'eus'; 
     $_SESSION["_LANGUAGE"] = $lang;  
 } else {
-
     $lang = $_SESSION["_LANGUAGE"] ?? 'eus';  
 }
-
 
 $translations = require __DIR__ . "/itzulpenak/" . $lang . ".php"; 
 
 $error = ''; 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['selectedLang'])) {
-   
-
- 
     if (isset($_POST['username']) && isset($_POST['password']) && !empty($_POST['username']) && !empty($_POST['password'])) {
         $username = $_POST['username'];
         $password = $_POST['password'];
@@ -64,6 +55,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['selectedLang'])) {
 <body>
 <header>
     <h1><?php echo trans('ABE TECHNOLOGY'); ?></h1>
+    <div class="menu-icon">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
     <nav>
         <ul>
             <li class="dropdown">
@@ -93,22 +89,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['selectedLang'])) {
     </nav>
 </header>
 
-<h2><?php echo trans('Login'); ?></h2>
+<main style="display: flex; justify-content: center; align-items: center; min-height: 80vh;">
+    <div style="max-width: 400px; width: 100%;">
+        <h2><?php echo trans('Login'); ?></h2>
+        <?php if (!empty($error)) { echo "<p style='color: red;'>$error</p>"; } ?>
+        <form action="saioa-hasi.php" method="POST" style="display: flex; flex-direction: column; gap: 15px;">
+            <label for="username" style="font-size: 1.2em;"><?php echo trans('Username'); ?>:</label>
+            <input type="text" id="username" name="username" required style="height: 2em; font-size: 1.1em;">
+            
+            <label for="password" style="font-size: 1.2em;"><?php echo trans('Password'); ?>:</label>
+            <input type="password" id="password" name="password" required style="height: 2em; font-size: 1.1em;">
+            
+            <button type="submit" style="font-size: 1.2em;"><?php echo trans('Login'); ?></button>
+        </form>
+        <p><?php echo trans('Already have an account?'); ?> <a href="erregistroa.php"><?php echo trans('Login here'); ?></a></p>
+        <p><a href="index.php"><?php echo trans('Back to homepage'); ?></a></p>
+    </div>
+</main>
 
-<?php if (!empty($error)) { echo "<p style='color: black;'>$error</p>"; } ?>
-
-<form action="saioa-hasi.php" method="POST">
-    <label for="username"><?php echo trans('Username'); ?>:</label>
-    <input type="text" id="username" name="username" required><br>
-    
-    <label for="password"><?php echo trans('Password'); ?>:</label>
-    <input type="password" id="password" name="password" required><br>
-    
-    <button type="submit"><?php echo trans('Login'); ?></button>
-</form>
-
-<p><?php echo trans('Already have an account?'); ?> <a href="erregistroa.php"><?php echo trans('Login here'); ?></a></p>
-<p><a href="index.php"><?php echo trans('Back to homepage'); ?></a></p>
-
+<footer>
+    <p>&copy; ABE TECHNOLOGY - <?php echo trans('Eskubide gustiak erreserbatuta'); ?></p>
+</footer>
+<script src="menu.js"></script>
 </body>
 </html>
