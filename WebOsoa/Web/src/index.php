@@ -163,7 +163,7 @@ $emaitza = $stmt->get_result();
     <footer>
         <p>&copy; ABE TECHNOLOGY - <?php echo trans('Eskubide gustiak erreserbatuta'); ?></p>
     </footer>
-    <script src="menu.js"></script>
+    <script src="../public/menu.js"></script>
 </body>
 </html>
  

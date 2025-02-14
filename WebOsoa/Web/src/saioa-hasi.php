@@ -110,6 +110,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['selectedLang'])) {
 <footer>
     <p>&copy; ABE TECHNOLOGY - <?php echo trans('Eskubide gustiak erreserbatuta'); ?></p>
 </footer>
-<script src="menu.js"></script>
+<script src="../public/menu.js"></script>
 </body>
 </html>

@@ -91,6 +91,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <footer>
         <p>&copy; ABE TECHNOLOGY - <?php echo $translations['Eskubide gustiak erreserbatuta']; ?></p>
     </footer>
-    <script src="menu.js"></script>
+    <script src="../public/menu.js"></script>
 </body>
 </html>
