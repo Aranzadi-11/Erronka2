@@ -1,0 +1,65 @@
+package erronka;
+
+import java.awt.EventQueue;
+import java.awt.GridLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import java.awt.event.ActionListener;
+
+public class App extends JFrame {
+
+    private static final long serialVersionUID = 1L;
+    private String erabiltzaileMota; // Gordeko dugu ea 'Langile' edo 'Administratzaile' den
+
+    public App(String mota) {
+        this.erabiltzaileMota = mota;
+        
+        setTitle("MENUA");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(150, 150, 400, 400);
+        setLayout(new GridLayout(6, 1, 10, 10));
+
+        // Botoiak sortu
+        JButton btnProduktuak = new JButton("Produktuak");
+        btnProduktuak.addActionListener(e -> new ProduktuakFrame().setVisible(true));
+        add(btnProduktuak);
+
+        if (erabiltzaileMota.equals("Administratzaile")) {
+            JButton btnLangileak = new JButton("Langileak");
+            btnLangileak.addActionListener(e -> new LangileakFrame().setVisible(true));
+            add(btnLangileak);
+
+            JButton btnEmailea = new JButton("Emailea");
+            btnEmailea.addActionListener(e -> new EmaileaFrame().setVisible(true));
+            add(btnEmailea);
+
+            JButton btnErabiltzaileak = new JButton("Erabiltzaileak");
+            btnErabiltzaileak.addActionListener(e -> new ErabiltzaileakFrame().setVisible(true));
+            add(btnErabiltzaileak);
+
+            JButton btnEskaerak = new JButton("Eskaerak");
+            btnEskaerak.addActionListener(e -> new EskaerakFrame().setVisible(true));
+            add(btnEskaerak);
+        }
+
+        JButton btnIrten = new JButton("Irten");
+        btnIrten.addActionListener(e -> {
+            JOptionPane.showMessageDialog(this, "Saioa amaitu da.", "Agur", JOptionPane.INFORMATION_MESSAGE);
+            System.exit(0);
+        });
+        add(btnIrten);
+    }
+
+    public static void main(String[] args) {
+        EventQueue.invokeLater(() -> {
+            try {
+                App frame = new App("Administratzaile"); // Proban erabiltzeko
+                frame.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+}
+

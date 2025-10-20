@@ -1,0 +1,57 @@
+package trivialariketa;
+
+import java.util.Scanner;
+
+class JokoarenEgitura {
+    private Galdera[] galderak;
+    private int puntuazioa;
+
+    //Sortzailea
+    public JokoarenEgitura() {
+        galderak = new Galdera[10];
+        puntuazioa = 0;
+        galderakPrestatu();
+    }
+
+    private void galderakPrestatu() {
+        galderak[0] = new Galdera("Zein da Euskal Herriko hiriburua?", new String[]{"Bilbo", "Gasteiz", "Donostia"}, 1);
+        galderak[1] = new Galdera("Zein da eguzki sistemako planeta handiena?", new String[]{"Lurra", "Jupiter", "Saturno"}, 1);
+        galderak[2] = new Galdera("Zenbat probintzia daude Euskal Herrian?", new String[]{"6", "7", "8"}, 1);
+        galderak[3] = new Galdera("Non dago Ordizia", new String[]{"Gipuzkoa", "Granada", "Bizkaia"}, 0);
+        galderak[4] = new Galdera("Zein da munduko ibairik luzeena?", new String[]{"Amazonas", "Nilo", "Ebro"}, 1);
+        galderak[5] = new Galdera("Zein urtetan hasi zen Bigarren Mundu Gerra?", new String[]{"1939", "1945", "1914"}, 0);
+        galderak[6] = new Galdera("Zein da planetarik beroena?", new String[]{"Venus", "Merkurio", "Marte"}, 0);
+        galderak[7] = new Galdera("Zenbat kontinente daude munduan?", new String[]{"5", "6", "7"}, 2);
+        galderak[8] = new Galdera("Zein da Euskal Herriko mendirik altuena?", new String[]{"Aizkorri", "Anboto", "Txindoki"}, 0);
+        galderak[9] = new Galdera("Nora joan da Sadic futbolaria", new String[]{"Valencia FC", "Barcelona FC", "PSG"}, 0);
+    }
+
+    public void hasiJokoa() {
+        Scanner scanner = new Scanner(System.in);
+        boolean[] aukeratutakoIndizeak = new boolean[galderak.length];
+        int kontagailua = 0;
+
+        while (kontagailua < 3) {
+            int random = (int) (Math.random() * galderak.length);
+            if (!aukeratutakoIndizeak[random]) {
+                aukeratutakoIndizeak[random] = true;
+                kontagailua++;
+                Galdera galdera = galderak[random];
+                galdera.erakutsiGaldera();
+                System.out.print("Zure erantzuna (1, 2 edo 3): ");
+                int erabiltzaileErantzuna = scanner.nextInt();
+
+                if (galdera.egiaztatuErantzuna(erabiltzaileErantzuna)) {
+                    puntuazioa++;
+                    System.out.println("Zuzena!\n");
+                } else {
+                    System.out.println("Okerra!\n");
+                }
+            }
+        }
+
+        scanner.close();
+        System.out.println("Jokoa amaitu da! Zure puntuazioa: " + puntuazioa + "/3");
+    }
+}
+

@@ -1,0 +1,93 @@
+package erronka3;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Aplikazioko leiho nagusia, non erabiltzaileak bere taula aukerak botoien bidez hauta ditzake.
+ */
+public class APP extends JFrame {
+    private static final long serialVersionUID = 1L;
+    private JPanel edukiontzia;
+    private JPanel botoiakPanel;  // Botoiak agertzen diren panela
+    private JPanel taulaPanel;     // Taula datuak erakusteko panela
+
+    public APP(String userType) {
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 1000, 600);
+        edukiontzia = new JPanel();
+        edukiontzia.setLayout(new BorderLayout());
+        setContentPane(edukiontzia);
+        setTitle("Aplikazioa");
+
+        // Botoiak agertzen dituen panela sortu
+        botoiakPanel = new JPanel();
+        botoiakPanel.setLayout(new BoxLayout(botoiakPanel, BoxLayout.Y_AXIS));
+        sortuBotoiak(userType);  // Erabiltzaile motaren arabera botoiak sortu
+
+        // Taula erakusteko panela
+        taulaPanel = new JPanel();
+        taulaPanel.setLayout(new BorderLayout());
+        
+        // JSplitPane erabiliz, botoiak eta taula katea banatu
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, botoiakPanel, taulaPanel);
+        splitPane.setDividerLocation(200);  // Botoien eta taularen arteko banaketa
+        splitPane.setDividerSize(10);
+        edukiontzia.add(splitPane, BorderLayout.CENTER);
+
+        setVisible(true);
+    }
+
+    private void sortuBotoiak(String userType) {
+        // Erabiltzaile motaren arabera erakutsi behar diren taulak lortu
+        List<String> taulak = getTaulakErabiltzaileMota(userType);
+        
+        for (String taula : taulak) {
+            JButton taulaBotoia = new JButton(taula);
+            taulaBotoia.setFont(new Font("Arial", Font.PLAIN, 16));
+            taulaBotoia.addActionListener(e -> erakutsiTaula(taula));
+            botoiakPanel.add(taulaBotoia);
+        }
+    }
+
+    private void erakutsiTaula(String taulaIzena) {
+        // Aukeratutako taula taulaPanel-ean erakutsi
+        JTable table = new JTable();
+        // Datu-baseko datuekin betetzeko logika:
+        table.setModel(new TaulaErakuslea(taulaIzena));
+        JScrollPane scrollPane = new JScrollPane(table);
+        taulaPanel.removeAll();
+        taulaPanel.add(scrollPane, BorderLayout.CENTER);
+        taulaPanel.revalidate();
+        taulaPanel.repaint();
+    }
+
+    private List<String> getTaulakErabiltzaileMota(String userType) {
+        List<String> taulak = new ArrayList<>();
+        switch (userType) {
+            case "Administratzailea":
+                taulak.add("bezeroak");
+                taulak.add("erreserbak");
+                taulak.add("langileak");
+                taulak.add("logelak");
+                taulak.add("zerbitzuak");
+                break;
+            case "Informatikaria":
+                taulak.add("bezeroak");
+                taulak.add("erreserbak");
+                taulak.add("logelak");
+                taulak.add("zerbitzuak");
+                break;
+            case "Harreragilea":
+                taulak.add("bezeroak");
+                taulak.add("erreserbak");
+                break;
+            default:
+                break;
+        }
+        return taulak;
+    }
+}

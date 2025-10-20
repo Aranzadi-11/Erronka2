@@ -1,0 +1,40 @@
+package erronka3;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+
+/**
+ * Clase que contiene la lógica de autenticación de usuarios.
+ */
+public class Erabiltzailea {
+
+    /**
+     * Verifica las credenciales del usuario contra la base de datos.
+     * @param erabiltzaileIzena Nombre de usuario.
+     * @param pasahitza Contraseña.
+     * @return Un HashMap con datos del usuario (nombre y tipo) o vacío si la autenticación falla.
+     */
+    public static HashMap<String, String> egiaztatuErabiltzailea(String erabiltzaileIzena, String pasahitza) {
+        HashMap<String, String> erabiltzaileDatuak = new HashMap<>();
+        String sql = "SELECT izena, erabiltzaileMota FROM langileak WHERE erabiltzaileIzena = ? AND pasahitza = ?";
+
+        try (Connection konexioa = DBKonexioa.konektatu();
+             PreparedStatement stmt = konexioa.prepareStatement(sql)) {
+            
+            stmt.setString(1, erabiltzaileIzena);
+            stmt.setString(2, pasahitza);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                erabiltzaileDatuak.put("izena", rs.getString("izena"));
+                erabiltzaileDatuak.put("erabiltzaileMota", rs.getString("erabiltzaileMota"));
+            }
+        } catch (SQLException e) {
+            System.out.println("Errorea erabiltzailea egiaztatzean: " + e.getMessage());
+        }
+        return erabiltzaileDatuak;
+    }
+}

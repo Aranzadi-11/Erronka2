@@ -1,0 +1,20 @@
+package erronka3;
+
+import java.util.List;
+
+public abstract class Botoiak {
+    protected List<String> datosSeleccionados;
+    
+    //Botoiak erakutsi taularen arabera
+    public abstract void botoiakErakutsi();
+
+    //Datuak aukeratzeko metodoa
+    public void datuakAukeratu(String datoId) {
+    }
+
+    //Datuak ezabatzeko metodoa
+    public abstract void datuakEzabatu(String id);
+
+    //Datuak eguneratzeko metodoa
+    public abstract void datuakEguneratu(String id);
+}

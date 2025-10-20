@@ -1,0 +1,64 @@
+package erronka3;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class DBAukerak {
+    // Logelak taulatik "izena" array bezala lortzeko
+    public static String[] getLogelaIzenaArray() {
+        List<String> izenak = new ArrayList<>();
+        String sql = "SELECT izena FROM logelak";
+        try (Connection con = DBKonexioa.konektatu();
+             Statement stmt = con.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while(rs.next()){
+                izenak.add(rs.getString("izena"));
+            }
+        } catch (SQLException e) {
+            System.out.println("Errorea logela izenak hartzean: " + e.getMessage());
+        }
+        return izenak.toArray(new String[0]);
+    }
+    
+    // Logela baten arabera, erreserbatu dituzten bezeroen "erabiltzaileIzena" array
+    public static String[] getBezeroErreserbatuArray(String logelaIzena) {
+        List<String> izenak = new ArrayList<>();
+        String sql = "SELECT DISTINCT bez.erabiltzaileIzena FROM erreserbak AS err " +
+                     "JOIN bezeroak AS bez ON err.idBezeroa = bez.idBezeroa " +
+                     "JOIN logelak AS log ON err.idLogela = log.idLogela " +
+                     "WHERE log.izena = ?";
+        try (Connection con = DBKonexioa.konektatu();
+             PreparedStatement pst = con.prepareStatement(sql)) {
+            pst.setString(1, logelaIzena);
+            ResultSet rs = pst.executeQuery();
+            while(rs.next()){
+                izenak.add(rs.getString("erabiltzaileIzena"));
+            }
+        } catch (SQLException e) {
+            System.out.println("Errorea bezero izenak hartzean: " + e.getMessage());
+        }
+        return izenak.toArray(new String[0]);
+    }
+    
+    // Logela eta bezeroaren arabera, erreserba datak array
+    public static String[] getErreserbaDataArray(String logelaIzena, String bezeroIzena) {
+        List<String> datak = new ArrayList<>();
+        String sql = "SELECT err.erreserbaEguna FROM erreserbak AS err " +
+                     "JOIN bezeroak AS bez ON err.idBezeroa = bez.idBezeroa " +
+                     "JOIN logelak AS log ON err.idLogela = log.idLogela " +
+                     "WHERE log.izena = ? AND bez.erabiltzaileIzena = ?";
+        try (Connection con = DBKonexioa.konektatu();
+             PreparedStatement pst = con.prepareStatement(sql)) {
+            pst.setString(1, logelaIzena);
+            pst.setString(2, bezeroIzena);
+            ResultSet rs = pst.executeQuery();
+            while(rs.next()){
+                datak.add(rs.getString("data"));
+            }
+        } catch (SQLException e) {
+            System.out.println("Errorea erreserba datak hartzean: " + e.getMessage());
+        }
+        return datak.toArray(new String[0]);
+    }
+}

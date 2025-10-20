@@ -1,0 +1,14 @@
+package ariketaklaseekin_2.entrega;
+
+public class PasswordApp {
+	public static void main(String[] args) {
+		
+	Password password1 = new Password("ABC123");
+	Password password2 = new Password("ABCBEN8");
+	
+	System.out.println(password1.LuzeeraKalkulatu());
+	System.out.println(password2.LuzeeraKalkulatu());
+	
+	System.out.println(password2.isStrong(password2));
+	}
+}

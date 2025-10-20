@@ -1,0 +1,113 @@
+package erronka3;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+
+/**
+ * Panel que se encarga de mostrar las tablas correspondientes
+ * según el tipo de usuario, consultando y mostrando los datos existentes.
+ */
+public class TaulaErakuslea extends JPanel {
+
+    public TaulaErakuslea(String userType) {
+        setLayout(new GridLayout(0, 1));  // Una columna con múltiples filas
+        
+        // Obtener las tablas a mostrar según el tipo de usuario
+        List<String> tablesToShow = getTablesForUserType(userType);
+
+        // Crear y agregar los paneles de cada tabla
+        for (String table : tablesToShow) {
+            add(createTablePanel(table));
+        }
+    }
+
+    /**
+     * Define las tablas a mostrar para cada tipo de usuario.
+     * @param userType Tipo de usuario autenticado.
+     * @return Lista de nombres de tablas.
+     */
+    private List<String> getTablesForUserType(String userType) {
+        List<String> tables = new ArrayList<>();
+        switch (userType) {
+            case "Administratzailea":
+                tables.add("bezeroak");
+                tables.add("erreserbak");
+                tables.add("langileak");
+                tables.add("logelak");
+                tables.add("zerbitzuak");
+                break;
+            case "Informatikaria":
+                tables.add("bezeroak");
+                tables.add("erreserbak");
+                tables.add("logelak");
+                tables.add("zerbitzuak");
+                break;
+            case "Harreragilea":
+                tables.add("bezeroak");
+                tables.add("erreserbak");
+                break;
+            default:
+                break;
+        }
+        return tables;
+    }
+
+    /**
+     * Crea un panel que contiene una tabla con los datos obtenidos de la base de datos.
+     * @param tableName Nombre de la tabla.
+     * @return JPanel con la representación de la tabla.
+     */
+    private JPanel createTablePanel(String tableName) {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createTitledBorder(tableName));
+
+        JTable table = new JTable();
+        // Se obtiene el modelo de datos de la base de datos y se asigna al JTable.
+        DefaultTableModel model = getTableData(tableName);
+        table.setModel(model);
+
+        panel.add(new JScrollPane(table), BorderLayout.CENTER);
+        return panel;
+    }
+
+    /**
+     * Consulta la base de datos para obtener los datos y nombres de columna de la tabla indicada.
+     * @param tableName Nombre de la tabla a consultar.
+     * @return DefaultTableModel con los datos de la tabla.
+     */
+    private DefaultTableModel getTableData(String tableName) {
+        Vector<String> columnNames = new Vector<>();
+        Vector<Vector<Object>> data = new Vector<>();
+
+        String sql = "SELECT * FROM " + tableName;
+        try (Connection conn = DBKonexioa.konektatu();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            // Obtener nombres de las columnas
+            ResultSetMetaData metaData = rs.getMetaData();
+            int columnCount = metaData.getColumnCount();
+            for (int i = 1; i <= columnCount; i++) {
+                columnNames.add(metaData.getColumnName(i));
+            }
+
+            // Obtener datos fila por fila
+            while (rs.next()) {
+                Vector<Object> row = new Vector<>();
+                for (int i = 1; i <= columnCount; i++) {
+                    row.add(rs.getObject(i));
+                }
+                data.add(row);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Errorea '" + tableName + "' taulan datuak eskuratzean:\n" + e.getMessage(), "Errorea", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+        return new DefaultTableModel(data, columnNames);
+    }
+}

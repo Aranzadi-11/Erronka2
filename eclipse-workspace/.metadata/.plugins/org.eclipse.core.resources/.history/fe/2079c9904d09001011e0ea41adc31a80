@@ -1,0 +1,218 @@
+package erronka3;
+
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+
+public class PDFSortzailea {
+
+    public static void mostrarFormulario() {
+        JFrame frame = new JFrame("PDF Sortu - Erreserbak");
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setLayout(new BorderLayout());
+
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBackground(Color.WHITE);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5,5,5,5);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        // Combo para Logela (Izena)
+        gbc.gridx = 0; gbc.gridy = 0;
+        panel.add(new JLabel("Logela (Izena):"), gbc);
+        gbc.gridx = 1;
+        JComboBox<String> logelaCombo = new JComboBox<>(DBAukerak.getLogelaIzenaArray());
+        panel.add(logelaCombo, gbc);
+
+        // Combo para Bezeroa (Erabiltzaile Izena)
+        gbc.gridx = 0; gbc.gridy = 1;
+        panel.add(new JLabel("Bezeroa (Erabiltzaile Izena):"), gbc);
+        gbc.gridx = 1;
+        JComboBox<String> bezeroCombo = new JComboBox<>(new String[]{});  // Inicializamos vacío
+        panel.add(bezeroCombo, gbc);
+
+        // Combo para Data (Erreserba Data)
+        gbc.gridx = 0; gbc.gridy = 2;
+        panel.add(new JLabel("Data:"), gbc);
+        gbc.gridx = 1;
+        JComboBox<String> dataCombo = new JComboBox<>(new String[]{});  // Inicializamos vacío
+        panel.add(dataCombo, gbc);
+
+        // Actualizar combo de Bezero cuando se selecciona logela
+        logelaCombo.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                String logelaIzena = (String) logelaCombo.getSelectedItem();
+                String[] bezeroak = DBAukerak.getBezeroErreserbatuArray(logelaIzena);
+                bezeroCombo.setModel(new DefaultComboBoxModel<>(bezeroak));
+            }
+        });
+
+        // Actualizar combo de Data cuando se selecciona el bezero
+        bezeroCombo.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                String logelaIzena = (String) logelaCombo.getSelectedItem();
+                String bezeroIzena = (String) bezeroCombo.getSelectedItem();
+                String[] datak = DBAukerak.getErreserbaDataArray(logelaIzena, bezeroIzena);
+                dataCombo.setModel(new DefaultComboBoxModel<>(datak));
+            }
+        });
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(Color.WHITE);
+        JButton sortuButton = new JButton("Sortu PDF");
+        JButton ezeztatuButton = new JButton("Ezeztatu");
+        buttonPanel.add(sortuButton);
+        buttonPanel.add(ezeztatuButton);
+
+        sortuButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                // Recoger información
+                String logela = (String) logelaCombo.getSelectedItem();
+                String bezero = (String) bezeroCombo.getSelectedItem();
+                String data = (String) dataCombo.getSelectedItem();
+
+                // Obtener datos de la reserva
+                String[] erreserbaInfo = DBAukerak.getErreserbaInformazioa(logela, bezero, data);
+                String sarreraData = erreserbaInfo[0];
+                String irteeraData = erreserbaInfo[1];
+                String sarreraOrdua = erreserbaInfo[2];
+                String irteeraOrdua = erreserbaInfo[3];
+                String prezioa = erreserbaInfo[4];
+
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setDialogTitle("Aukeratu non gorde PDF-a");
+                fileChooser.addChoosableFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("PDF files", "pdf"));
+                fileChooser.setAcceptAllFileFilterUsed(false);
+
+                int userSelection = fileChooser.showSaveDialog(frame);
+                if (userSelection == JFileChooser.APPROVE_OPTION) {
+                    File fileToSave = fileChooser.getSelectedFile();
+                    if (!fileToSave.getName().endsWith(".pdf")) {
+                        fileToSave = new File(fileToSave.getAbsolutePath() + ".pdf");
+                    }
+
+                    try (PDDocument document = new PDDocument()) {
+                        PDPage page = new PDPage();
+                        document.addPage(page);
+                        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+                        // Dibujar cabecera azul en la parte superior de la página
+                        contentStream.setNonStrokingColor(0, 102, 204); // Azul
+                        contentStream.addRect(0, 720, page.getMediaBox().getWidth(), 80);
+                        contentStream.fill();
+
+                        // Incluir logo (ajusta la ruta según la ubicación exacta de tu archivo)
+                        try {
+                            PDImageXObject image = PDImageXObject.createFromFile("/Erronka3/src/resouce/BBC_Grand_Hotel_Logo.png", document);
+                            float imageWidth = 80;
+                            float imageHeight = 80;
+                            float imageX = page.getMediaBox().getWidth() - imageWidth - 20;
+                            float imageY = 720; // Ubicado dentro de la cabecera
+                            contentStream.drawImage(image, imageX, imageY, imageWidth, imageHeight);
+                        } catch (Exception imgEx) {
+                            System.err.println("No se pudo cargar la imagen: " + imgEx.getMessage());
+                        }
+
+                        // Escribir el título "FAKTURA" más abajo en la cabecera para mejorar su lectura
+                        contentStream.beginText();
+                        contentStream.setNonStrokingColor(Color.WHITE);
+                        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 26);
+                        // Ubicar el título en el centro verticalmente de la cabecera (por ejemplo, 680)
+                        contentStream.newLineAtOffset(50, 680);
+                        contentStream.showText("FAKTURA");
+                        contentStream.endText();
+
+                        // Restablecer el color del texto a negro para el resto del contenido
+                        contentStream.setNonStrokingColor(Color.BLACK);
+                        contentStream.setFont(PDType1Font.HELVETICA, 12);
+
+                        // Posicionar la información de la factura
+                        int posY = 680 - 40; // Ajuste para separar el contenido del título
+                        int lineSpacing = 20;
+
+                        contentStream.beginText();
+                        contentStream.newLineAtOffset(50, posY);
+                        contentStream.showText("Logela: " + logela);
+                        contentStream.endText();
+
+                        posY -= lineSpacing;
+                        contentStream.beginText();
+                        contentStream.newLineAtOffset(50, posY);
+                        contentStream.showText("Bezeroa: " + bezero);
+                        contentStream.endText();
+
+                        posY -= lineSpacing;
+                        contentStream.beginText();
+                        contentStream.newLineAtOffset(50, posY);
+                        contentStream.showText("Erreserba eguna: " + data);
+                        contentStream.endText();
+
+                        posY -= lineSpacing;
+                        contentStream.beginText();
+                        contentStream.newLineAtOffset(50, posY);
+                        contentStream.showText("Sarrera eguna: " + sarreraData);
+                        contentStream.endText();
+
+                        posY -= lineSpacing;
+                        contentStream.beginText();
+                        contentStream.newLineAtOffset(50, posY);
+                        contentStream.showText("Irteera eguna: " + irteeraData);
+                        contentStream.endText();
+
+                        posY -= lineSpacing;
+                        contentStream.beginText();
+                        contentStream.newLineAtOffset(50, posY);
+                        contentStream.showText("Sarrera ordua: " + sarreraOrdua);
+                        contentStream.endText();
+
+                        posY -= lineSpacing;
+                        contentStream.beginText();
+                        contentStream.newLineAtOffset(50, posY);
+                        contentStream.showText("Irteera ordua: " + irteeraOrdua);
+                        contentStream.endText();
+
+                        posY -= lineSpacing;
+                        contentStream.beginText();
+                        contentStream.newLineAtOffset(50, posY);
+                        contentStream.showText("Prezioa: " + prezioa);
+                        contentStream.endText();
+
+                        // Línea divisoria para separar secciones
+                        contentStream.setStrokingColor(Color.BLACK);
+                        contentStream.setLineWidth(1f);
+                        contentStream.moveTo(50, posY - 10);
+                        contentStream.lineTo(page.getMediaBox().getWidth() - 50, posY - 10);
+                        contentStream.stroke();
+
+                        contentStream.close();
+                        document.save(fileToSave);
+                        JOptionPane.showMessageDialog(null, "PDF-a ongi sortu eta gorde da: " 
+                            + fileToSave.getAbsolutePath(), "Info", JOptionPane.INFORMATION_MESSAGE);
+                    } catch(Exception ex) {
+                        JOptionPane.showMessageDialog(null, "Errorea PDF sortzean: " 
+                            + ex.getMessage(), "Errorea", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        });
+
+        ezeztatuButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+            }
+        });
+
+        frame.add(panel, BorderLayout.CENTER);
+        frame.add(buttonPanel, BorderLayout.SOUTH);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
+}

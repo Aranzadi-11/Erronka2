@@ -1,0 +1,58 @@
+package erronka3;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class TaulaErakuslea extends JPanel {
+
+    public TaulaErakuslea(String userType) {
+        setLayout(new GridLayout(0, 1));  // Layout con una sola columna y múltiples filas
+        
+        // Obtener las tablas a mostrar según el tipo de usuario
+        List<String> tablesToShow = getTablesForUserType(userType);
+
+        // Crear y agregar las tablas al panel
+        for (String table : tablesToShow) {
+            add(createTablePanel(table));
+        }
+    }
+
+    private List<String> getTablesForUserType(String userType) {
+        List<String> tables = new ArrayList<>();
+        switch (userType) {
+            case "Administratzailea":
+                tables.add("bezeroak");
+                tables.add("erreserbak");
+                tables.add("langileak");
+                tables.add("logelak");
+                tables.add("zerbitzuak");
+                break;
+            case "Informatikaria":
+                tables.add("bezeroak");
+                tables.add("erreserbak");
+                tables.add("logelak");
+                tables.add("zerbitzuak");
+                break;
+            case "Harreragilea":
+                tables.add("bezeroak");
+                tables.add("erreserbak");
+                break;
+            default:
+                break;
+        }
+        return tables;
+    }
+
+    private JPanel createTablePanel(String tableName) {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createTitledBorder(tableName));
+
+        // Aquí se puede agregar la lógica para llenar la tabla con datos de la base de datos
+        JTable table = new JTable();  // Crear una tabla vacía por ahora
+        panel.add(new JScrollPane(table), BorderLayout.CENTER);
+
+        return panel;
+    }
+}

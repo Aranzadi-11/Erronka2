@@ -1,0 +1,40 @@
+package errepikapenariketak;
+
+public class Ariketa5 {
+    public static void main(String[] args) throws InterruptedException {
+        // Orduak, minutuak eta segundoak hasieratu
+        int orduak = 0, minutuak = 0, segundoak = 0;
+
+        // 24 orduko iterazioak (24 * 60 * 60 = 86400 iterazio)
+        for (int i = 0; i < 86400; i++) {
+            // Orduak, minutuak eta segundoak erakutsi
+            System.out.println(orduak + ":" + minutuak + ":" + segundoak);
+
+            // Segunduak gehitu
+            segundoak++;
+
+            // Segundoak 60ra iristen direnean minutuak gehitu eta segundoak zero bihurtu
+            if (segundoak == 60) {
+                segundoak = 0;
+                minutuak++;
+
+                // Minutuak 60ra iristen direnean orduak gehitu eta minutuak zero bihurtu
+                if (minutuak == 60) {
+                    minutuak = 0;
+                    orduak++;
+
+                    // Orduak 24ra iristen direnean kronometroa bukatu
+                    if (orduak == 24) {
+                        break;
+                    }
+                }
+            }
+
+            // 0.001 segundoko itxaronaldia
+            for (int j = 0; j < 1000000; j++) {
+                // Itxaron txiki bat simulatzen dugu denbora pasatzen den bitartean
+            }
+        }
+        System.out.println("Kronometroa bukatu da!");
+    }
+}

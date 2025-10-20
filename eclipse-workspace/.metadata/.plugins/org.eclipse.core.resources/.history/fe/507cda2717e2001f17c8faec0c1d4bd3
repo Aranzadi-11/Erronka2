@@ -1,0 +1,97 @@
+package erronka;
+
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+import java.awt.GridLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+
+/**
+ * App klase honek unibertsala den frame bat sortzen du, non
+ * menuko botoiak (taulen izenekin) klik egiten denean,
+ * edukia (JTable) eguneratzen den panel batean.
+ */
+public class App extends JFrame {
+
+    private JPanel contentPane;  // Frame-eko nagusi panela (layout BorderLayout)
+    private JPanel menuPanel;    // Botoiak gordetzen dituen panela (ezkerrean)
+    private JPanel tablePanel;   // Taula bistaratzen den panela (erdian)
+
+    /**
+     * Eraikitzen du App frame-a.
+     * @param userMota Erabiltzaile mota ("Administratzaile", "Langile", ...), 
+     *                   hemen aukera guztiak erakusten dira.
+     */
+    public App(String userMota) {
+        setTitle("Datu-basearen kudeaketa");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(150, 150, 850, 500);
+        
+        // Layout nagusia definitzen dugu: menu a ezkerrean, eta edukia (taula) erdian
+        contentPane = new JPanel(new BorderLayout());
+        setContentPane(contentPane);
+        
+        // Menu panela (ezkerrean): botoi guztiak antolatuta, GridLayout erabiliz.
+        menuPanel = new JPanel(new GridLayout(5, 1, 10, 10));
+        
+        // Botoia: "Langileak"
+        JButton btnLangileak = new JButton("Langileak");
+        btnLangileak.addActionListener(e -> loadTable("langileak"));
+        menuPanel.add(btnLangileak);
+        
+        // Botoia: "Produktuak"
+        JButton btnProduktuak = new JButton("Stock-a");
+        btnProduktuak.addActionListener(e -> loadTable("stock"));
+        menuPanel.add(btnProduktuak);
+        
+        // Botoia: "Emailea"
+        JButton btnEmailea = new JButton("Emailea");
+        btnEmailea.addActionListener(e -> loadTable("emailea"));
+        menuPanel.add(btnEmailea);
+        
+        // Botoia: "Erabiltzaileak"
+        JButton btnErabiltzaileak = new JButton("Erabiltzaileak");
+        btnErabiltzaileak.addActionListener(e -> loadTable("erabiltzaileak"));
+        menuPanel.add(btnErabiltzaileak);
+        
+        // Botoia: "Eskaerak"
+        JButton btnEskaerak = new JButton("Eskaerak");
+        btnEskaerak.addActionListener(e -> loadTable("eskaerak"));
+        menuPanel.add(btnEskaerak);
+        
+        // Menu panela ezkerrean gehitu
+        contentPane.add(menuPanel, BorderLayout.WEST);
+        
+        // Taula panela: hemen erakutsiko da den DB-tik lortutako JTable objektua.
+        tablePanel = new JPanel(new BorderLayout());
+        contentPane.add(tablePanel, BorderLayout.CENTER);
+    }
+
+    /**
+     * Metodo honek kontsultaren bidez taula lortzen du eta
+     * eguneratzen du tablePanel-eko edukia.
+     * @param tableName Datu-basean dauden taulen izenburua (adib., "langileak")
+     */
+    private void loadTable(String tableName) {
+        // Kontsulta klasearen metodoa erabiliz lortu taula (JTable)
+        JTable table = Kontsulta.getTaulenDatuak(tableName);
+        // Lehenik, kendu aurreko edukia
+        tablePanel.removeAll();
+        // Gehitu scroll-pane-arekin taula berria
+        tablePanel.add(new JScrollPane(table), BorderLayout.CENTER);
+        // Eguneratu panelaren tamaina eta edukiak
+        tablePanel.revalidate();
+        tablePanel.repaint();
+    }
+    
+    public static void main(String[] args) {
+        // Framea sortu eta erakutsi
+        EventQueue.invokeLater(() -> {
+            App frame = new App("Administratzaile"); // Parametroa: erabiltzaile mota, hemen aukera guztiak erakusten dira
+            frame.setVisible(true);
+        });
+    }
+}

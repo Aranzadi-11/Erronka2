@@ -1,0 +1,45 @@
+package ariketaklaseekin_2.entrega;
+
+public class Password {
+    String karaktereak;
+
+    // Sortzaileak
+    public Password(String karaktereak) {
+        this.karaktereak = karaktereak;
+    }
+
+    public Password() {}
+
+    // Getter-ak
+    public String getKaraktereak() {
+        return karaktereak;
+    }
+
+    // Setter-ak
+    public void setKaraktereak(String karaktereak) {
+        this.karaktereak = karaktereak;
+    }
+
+    // Luzeera kalkulatu
+    public int LuzeeraKalkulatu() {
+        if (karaktereak == null) {
+            return 0; 
+        }
+        return karaktereak.length();
+    }
+        
+ // Pasahitzaren seguritatea
+    public boolean isStrong(Password password) {
+        boolean indartsuaDa = false;
+
+        if (this.karaktereak.matches(".*\\d.*") || password.karaktereak.matches(".*\\d.*")) {
+        	if (this.karaktereak.length() || password.karaktereak)
+            indartsuaDa = true;
+        }
+
+        return indartsuaDa;
+    }
+}
+    
+
+

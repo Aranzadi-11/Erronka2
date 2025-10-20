@@ -1,0 +1,53 @@
+package trivialariketa;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Scanner;
+
+class JokoarenEgitura {
+ private ArrayList<Galdera> galderak;
+ private int puntuazioa;
+
+ // Eraikitzailea
+ public JokoarenEgitura() {
+     galderak = new ArrayList<>();
+     puntuazioa = 0;
+     galderakPrestatu();
+ }
+
+ // Galderen zerrenda sortzeko metodoa
+ private void galderakPrestatu() {
+     galderak.add(new Galdera("Zein da Euskal Herriko hiriburua?", new String[]{"Bilbo", "Gasteiz", "Donostia"}, 1));
+     galderak.add(new Galdera("Zein da eguzki sistemako planeta handiena?", new String[]{"Lurra", "Jupiter", "Saturno"}, 1));
+     galderak.add(new Galdera("Zenbat probintzia daude Euskal Herrian?", new String[]{"6", "7", "8"}, 1));
+     // Gehitu nahi beste galdera hemen
+ }
+
+ // Jokoa hasteko metodoa
+ public void hasiJokoa() {
+     Scanner scanner = new Scanner(System.in);
+     Collections.shuffle(galderak); // Galderak ausaz nahastu
+
+     for (Galdera galdera : galderak) {
+         galdera.erakutsiGaldera();
+         System.out.print("Zure erantzuna (1, 2 edo 3): ");
+         int erabiltzaileErantzuna = scanner.nextInt();
+
+         if (galdera.egiaztatuErantzuna(erabiltzaileErantzuna)) {
+             System.out.println("Zuzena!\n");
+             puntuazioa++;
+         } else {
+             System.out.println("Okerra!\n");
+         }
+     }
+
+     scanner.close();
+     amaituJokoa();
+ }
+
+ // Jokoaren amaiera erakusteko metodoa
+ private void amaituJokoa() {
+     System.out.println("Jokoa amaitu da! Zure puntuazioa: " + puntuazioa + "/" + galderak.size());
+ }
+}
+

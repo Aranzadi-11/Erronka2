@@ -1,0 +1,70 @@
+package trivialariketa;
+
+import java.util.Scanner;
+
+public class JokoarenEgitura {
+    private Galdera[] galderak;
+    private int puntuazioa;
+
+    //Sortzailea
+    public JokoarenEgitura() {
+        galderak = new Galdera[10];
+        puntuazioa = 0;
+        galderakPrestatu();
+    }
+
+    private void galderakPrestatu() {
+        galderak[0] = new Galdera("Zein da Java fitxategi baten luzapena?", new String[]{".doc", ".txt", ".java"}, 2);
+        galderak[1] = new Galdera("Zein da metodo nagusiaren izena Java-n?", new String[]{"start", "main", "run"}, 1);
+        galderak[2] = new Galdera("Zein hitz gako erabiltzen da klase bat sortzeko?", new String[]{"class", "method", "object"}, 0);
+        galderak[3] = new Galdera("Zein da bucle mota bat Java-n?", new String[]{"loop", "repeat", "for"}, 2);
+        galderak[4] = new Galdera("Zein da datu mota zenbaki osoetarako?", new String[]{"int", "float", "boolean"}, 0);
+        galderak[5] = new Galdera("Zein hitz gako erabiltzen da objektu bat sortzeko?", new String[]{"new", "create", "build"}, 0);
+        galderak[6] = new Galdera("Zein metodo erabiltzen da array baten luzera lortzeko?", new String[]{"size", "length", "count"}, 1);
+        galderak[7] = new Galdera("Zein da Java-n erabiltzen den IDE ezaguna?", new String[]{"Eclipse", "Word", "Photoshop"}, 0);
+        galderak[8] = new Galdera("Zein da 'if' adierazpenaren helburua?", new String[]{"Baldintzak egiaztatzea", "Bucleak egitea", "Objektuak sortzea"}, 0);
+        galderak[9] = new Galdera("Zein hitz gako erabiltzen da metodo bat estatikoa izateko?", new String[]{"static", "void", "final"}, 0);
+    }
+    
+    public void hasiJokoa() {
+        Scanner scanner = new Scanner(System.in);
+        boolean[] aukeratutakoGalderak = new boolean[galderak.length];
+        int kontagailua = 0;
+
+        while (kontagailua < 4) {
+            int random = (int) (Math.random() * galderak.length);
+            if (aukeratutakoGalderak[random] == false) {
+            	aukeratutakoGalderak[random] = true;
+                kontagailua++;
+                Galdera galdera = galderak[random];
+
+                boolean erantzunZuzena = false;
+                while (erantzunZuzena == false) {
+                    galdera.erakutsiGaldera();
+                    System.out.print("Zure erantzuna (1, 2 edo 3): ");
+
+                    int erabiltzailearenErantzuna = scanner.nextInt();
+
+                    if (erabiltzailearenErantzuna < 1 || erabiltzailearenErantzuna > 3) {
+                    	System.out.println();
+                        System.out.println("Erantzun baliogabea. Mesedez, sartu 1, 2 edo 3.");
+                    } else {
+                        if (galdera.egiaztatuErantzuna(erabiltzailearenErantzuna)) {
+                            puntuazioa++;
+                            System.out.println("Zuzena da!!!\n");
+                            erantzunZuzena = true;
+                        } else {
+                            System.out.println("Okerra da!!!\n");
+                            erantzunZuzena = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        scanner.close();
+        System.out.println("Jokoa amaitu da! Zure puntuazioa: " + puntuazioa + "/4");
+    }
+}
+
+

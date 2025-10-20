@@ -1,0 +1,46 @@
+package klasekoariketak;
+
+import java.util.Scanner;
+
+public class Txertatu {
+ 
+	public static void main(String[] args) {
+		int posizioa,zenbakia;
+		int array [] =new int[10];
+		Scanner sc = new Scanner(System.in);
+		
+		//Beteko dugu array lehenengo zatia
+		for(int i=0;i<5;i++) {
+			array[i]=i+1;
+		}
+		for(int i=0;i<array.length;i++) {
+			System.out.print(array[i]+" | ");
+		}
+		
+		System.out.println();
+		System.out.println("Sartu nahi duzun zenbakia idatzi: ");
+		zenbakia = sc.nextInt();
+		System.out.println("Zein posizioan gorde nahi duzu? (0-9): ");
+		posizioa = sc.nextInt();
+		// txertatuA(zenbakia, posizioa,array);
+		boolean txertatuDa=txertatuA(posizioa,zenbakia,array);
+		if(txertatuDa=true) {
+			System.out.println("Zure zenbakia "+zenbakia+" esandako posizioan "+posizioa+ " txertatu da");
+			for(int i=0;i<array.length;i++) {
+				System.out.print(array[i]+" | ");
+			}
+			System.out.println();
+		}else {
+			System.out.println("Zure zenbakia ezin izan da gorde.");
+		}
+	}
+ 
+	private static boolean txertatuA(int zenbakia, int posizioa,int array[]) {
+		if(array[posizioa]==0) {
+			array[posizioa]=zenbakia;
+			return true;
+		}else {
+			return false;
+	}
+	}
+}

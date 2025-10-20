@@ -1,0 +1,150 @@
+package erronka;
+
+import java.awt.EventQueue;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+
+/**
+ * Login klaseak erabiltzaileak autentikatzen ditu.
+ * Lehenik datu-basearekin konektatzen da; konektzioa egokia bada,
+ * login frame-a agertzen da.
+ * 
+ * Datu-basean, "langileak" taulan, erabiltzailearen informazioa (Izena,
+ * Abizena eta Langile_Mota) lortzen da. Login arrakastatsua bada, 
+ * App frame-a irekitzen da eta parametro bezala "Langile_Mota" pasatzen zaio.
+ */
+public class Login extends JFrame {
+
+    private static final long serialVersionUID = 1L;
+    private JTextField txtErabiltzailea;
+    private JPasswordField txtPasahitza;
+    private int saiakerak = 0; // Saiakeren kontadorea
+
+    public static void main(String[] args) {
+        EventQueue.invokeLater(() -> {
+            try {
+                // Lehenik, datu-basearekin konektatzen saiatzen gara.
+                Connection conn = DBKonexioa.getConnection();
+                if (conn != null) {
+                    conn.close();
+                    // Konektzioa egokia bada, Login frame-a ireki
+                    Login frame = new Login();
+                    frame.setVisible(true);
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, 
+                    "Datu-basearekin konektatzean akats bat gertatu da: " + e.getMessage(), 
+                    "Akatsa", JOptionPane.ERROR_MESSAGE);
+                System.exit(1);
+            }
+        });
+    }
+
+    public Login() {
+        setTitle("SAIOA SARTU");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(150, 150, 400, 300); // Leihoaren tamaina eta kokapena
+
+        JPanel contentPane = new JPanel();
+        contentPane.setLayout(new java.awt.GridLayout(6, 5, 30, 10));
+        setContentPane(contentPane);
+
+        // Erabiltzailearen sarrera
+        contentPane.add(new JLabel("Erabiltzailea:"));
+        txtErabiltzailea = new JTextField();
+        contentPane.add(txtErabiltzailea);
+
+        // Pasahitzaren sarrera
+        contentPane.add(new JLabel("Pasahitza:"));
+        txtPasahitza = new JPasswordField();
+        contentPane.add(txtPasahitza);
+
+        // Sartu botoia
+        JButton btnLogin = new JButton("Sartu");
+        contentPane.add(btnLogin);
+
+        // Sartu botoiaren ekintza: erabiltzailearen datuak kontsultatzea
+        btnLogin.addActionListener(e -> {
+            String erabiltzailea = txtErabiltzailea.getText();
+            String pasahitza = new String(txtPasahitza.getPassword());
+
+            // "langileak" taulan SQL kontsulta eginez, lortu erabiltzailearen informazioa:
+            // [Izena, Abizena, Langile_Mota]
+            String[] erabiltzaileDatuak = egiaztatu(erabiltzailea, pasahitza);
+
+            if (erabiltzaileDatuak != null) {
+                String izena = erabiltzaileDatuak[0];
+                String abizena = erabiltzaileDatuak[1];
+                String mota = erabiltzaileDatuak[2];
+
+                // Ongi etorri mezua erakutsi
+                JOptionPane.showMessageDialog(this, 
+                        "Ongi etorri, " + izena + " " + abizena + "! " + mota + " zara.", 
+                        "Ongi Etorri", JOptionPane.INFORMATION_MESSAGE);
+                this.dispose();  // Login frame-a itxi
+
+                // App frame-a ireki, eta parametro bezala "Langile_Mota" bidali
+                appIreki(mota);
+            } else {
+                saiakerak++;
+                if (saiakerak >= 3) {
+                    JOptionPane.showMessageDialog(this, 
+                        "3 saiakera okerrak egin dituzu. Programa itxi egingo da.", 
+                        "Akatsa", JOptionPane.ERROR_MESSAGE);
+                    System.exit(0);
+                } else {
+                    JOptionPane.showMessageDialog(this, 
+                        "Erabiltzailea edo pasahitza okerrak. " + saiakerak + "/3", 
+                        "Akatsa", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+    }
+
+
+    private String[] egiaztatu(String erabiltzailea, String pasahitza) {
+        String sql = "SELECT Izena, Abizena, Langile_Mota FROM langileak WHERE Erabiltzailea = ? AND Pasahitza = ?";
+        try (Connection conn = DBKonexioa.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, erabiltzailea);
+            pstmt.setString(2, pasahitza);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                String izena = rs.getString("Izena");
+                String abizena = rs.getString("Abizena");
+                String mota = rs.getString("Langile_Mota");
+                return new String[]{izena, abizena, mota};
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * Metodo honek App frame-a irekitzen du, eta parametro bezala "Langile_Mota"
+     * pasatzen du.
+     * @param mota Erabiltzailearen mota (adib.: "Administratzailea" edo beste bat)
+     */
+    private void appIreki(String mota) {
+        EventQueue.invokeLater(() -> {
+            try {
+                App frame = new App(mota);
+                frame.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+}
+

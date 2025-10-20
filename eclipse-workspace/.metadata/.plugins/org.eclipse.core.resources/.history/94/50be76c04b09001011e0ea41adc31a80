@@ -1,0 +1,7 @@
+package resouce;
+
+public class Snippet {
+	con el siguiente codigo que te voy a mandar el cual lo que hace es crear un archivo pdf, quiero que lo modifiques para que se vea mejor visualmente para el cliente y sea mas atractivo para ello quiero que el color que mas destaque sea el blanco, y en segundo lugar quiero que sean el azul y el negro, aparte de eso quiero que en el pdf aparezca tambien la imagen que te he enviado. Estoy utilizando eclipse para hacer el programa, dime que tengo que hacer para que la imagen este dentro del proyecto. Y este es el codigo que debes de modificar para ello:
+	
+	}
+

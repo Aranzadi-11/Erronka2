@@ -1,0 +1,31 @@
+package klasekoariketak;
+
+import java.util.Scanner;
+
+public class While {
+	
+	public static void main(String[] args) {
+		int zenbakia, karratua; // zenbakia jasotzeko aldagaia definitzen dugu.
+		Scanner sc = new Scanner (System.in);
+		
+		System.out.println("Sartu zenbaki bat mesedez: ");
+		zenbakia = sc.nextInt();
+		while (zenbakia!=0 ) {
+			if(zenbakia%2==0) {
+				System.out.println("Zenbakia bikoitia da.");
+			}else {
+				System.out.println("Zenbakia bakoitia da.");
+			}
+			if(zenbakia>0) {
+				System.out.println("Zenbakia positiboa da.");			
+			}else {
+				System.out.println("Zenbakia negatiboa da.");		
+			}
+			karratua = (int) Math.pow(zenbakia, 2);
+			System.out.println("Zenbakiaren karratua " +karratua+ " da.");
+			System.out.println("Sartu beste zenbaki bat edo 0 programa amaitzeko");
+			zenbakia=sc.nextInt();
+		}
+	}
+	}
+

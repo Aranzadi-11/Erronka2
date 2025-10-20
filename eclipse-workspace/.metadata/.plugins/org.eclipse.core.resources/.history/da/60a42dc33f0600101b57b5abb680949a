@@ -1,0 +1,87 @@
+package erronka3;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class APP extends JFrame {
+    private static final long serialVersionUID = 1L;
+    private JPanel edukiontzia;
+    private JPanel botonPanel;  // Panel para los botones
+    private JPanel tablaPanel;  // Panel para mostrar las tablas
+
+    public APP(String userType) {
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 1000, 600);
+        edukiontzia = new JPanel();
+        edukiontzia.setLayout(new BorderLayout());
+        setContentPane(edukiontzia);
+        setTitle("Aplikazioa");
+
+        // Crear panel de botones
+        botonPanel = new JPanel();
+        botonPanel.setLayout(new BoxLayout(botonPanel, BoxLayout.Y_AXIS));
+        crearBotones(userType);  // Crear los botones según el tipo de usuario
+
+        // Panel para mostrar las tablas
+        tablaPanel = new JPanel();
+        tablaPanel.setLayout(new BorderLayout());
+        
+        // Añadir los paneles al contenedor principal
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, botonPanel, tablaPanel);
+        splitPane.setDividerLocation(200);  // Separación entre los botones y la tabla
+        splitPane.setDividerSize(10);
+        edukiontzia.add(splitPane, BorderLayout.CENTER);
+
+        setVisible(true);
+    }
+
+    private void crearBotones(String userType) {
+        // Obtener las tablas a mostrar según el tipo de usuario
+        List<String> tablesToShow = getTablesForUserType(userType);
+        
+        for (String table : tablesToShow) {
+            JButton tableButton = new JButton(table);
+            tableButton.setFont(new Font("Arial", Font.PLAIN, 16));
+            tableButton.addActionListener(e -> mostrarTabla(table));
+            botonPanel.add(tableButton);
+        }
+    }
+
+    private void mostrarTabla(String tableName) {
+        // Mostrar la tabla correspondiente en el panel central
+        JTable table = new JTable();  // Crear una tabla vacía por ahora
+        // Aquí puedes agregar la lógica para llenar la tabla con datos de la base de datos
+        table.setModel(new TableModelFetcher(tableName));  // Llenar la tabla con datos desde la base de datos
+        JScrollPane scrollPane = new JScrollPane(table);
+        tablaPanel.removeAll();
+        tablaPanel.add(scrollPane, BorderLayout.CENTER);
+        tablaPanel.revalidate();
+        tablaPanel.repaint();
+    }
+
+    private List<String> getTablesForUserType(String userType) {
+        List<String> tables = new ArrayList<>();
+        switch (userType) {
+            case "Administratzailea":
+                tables.add("bezeroak");
+                tables.add("erreserbak");
+                tables.add("langileak");
+                tables.add("logelak");
+                tables.add("zerbitzuak");
+                break;
+            case "Informatikaria":
+                tables.add("bezeroak");
+                tables.add("erreserbak");
+                tables.add("logelak");
+                tables.add("zerbitzuak");
+                break;
+            case "Harreragilea":
+                tables.add("bezeroak");
+                tables.add("erreserbak");
+                break;
+            default:
+                break;
+        }
+        return tables;
+    }
+}

@@ -1,0 +1,89 @@
+package erronka3;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class Login extends JFrame {
+    private static final long serialVersionUID = 1L;
+    private JPanel contentPane;
+    private JTextField erabiltzaileIzenaField;
+    private JPasswordField pasahitzaField;
+
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    Login frame = new Login();
+                    frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public Login() {
+        setTitle("Login");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 350, 200);
+        contentPane = new JPanel();
+        contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        setContentPane(contentPane);
+        contentPane.setLayout(new GridLayout(3, 2, 5, 5));
+        
+        JLabel lblErabiltzaileIzena = new JLabel("Erabiltzaile Izena:");
+        contentPane.add(lblErabiltzaileIzena);
+        
+        erabiltzaileIzenaField = new JTextField();
+        contentPane.add(erabiltzaileIzenaField);
+        
+        JLabel lblPasahitza = new JLabel("Pasahitza:");
+        contentPane.add(lblPasahitza);
+        
+        pasahitzaField = new JPasswordField();
+        contentPane.add(pasahitzaField);
+        
+        JButton btnLogin = new JButton("Saioa Hasi");
+        btnLogin.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                login();
+            }
+        });
+        contentPane.add(btnLogin);
+    }
+
+    private void login() {
+        String erabiltzaileIzena = erabiltzaileIzenaField.getText();
+        String pasahitza = new String(pasahitzaField.getPassword());
+        
+        if (Erabiltzailea.egiaztatu(erabiltzaileIzena, pasahitza)) {
+            JOptionPane.showMessageDialog(this, "Ongi etorri, " + erabiltzaileIzena + "!");
+            dispose();
+            new APP().setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "Erabiltzaile Izena edo Pasahitza okerra!", "Errorea", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+}
+
+class Erabiltzailea {
+    public static boolean egiaztatu(String erabiltzaileIzena, String pasahitza) {
+        String sql = "SELECT * FROM Langileak WHERE Erabiltzaile_Izena = ? AND Pasahitza = ?";
+        try (Connection konexioa = DBKonexioa.konektatu();
+             PreparedStatement ps = konexioa.prepareStatement(sql)) {
+            ps.setString(1, erabiltzaileIzena);
+            ps.setString(2, pasahitza);
+            ResultSet rs = ps.executeQuery();
+            return rs.next(); // True bada, erabiltzailea existitzen da
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+}

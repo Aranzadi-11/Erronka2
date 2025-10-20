@@ -1,0 +1,32 @@
+package erronka3;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Ventana principal de la aplicación. Muestra en un panel lateral
+ * los botones para navegar entre las tablas disponibles según el tipo
+ * de usuario, y en el panel principal se muestran los datos de la tabla
+ * seleccionada.
+ */
+public class APP extends JFrame {
+    private static final long serialVersionUID = 1L;
+    private JPanel contentPane;
+    private JPanel buttonPanel;
+    private JPanel displayPanel;
+    private String userType;
+    
+    public APP(String userType) {
+        this.userType = userType;
+        setTitle("Aplikazioa");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 900, 600);
+        
+        contentPane = new JPanel(new BorderLayout());
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        setContentPane(contentPane

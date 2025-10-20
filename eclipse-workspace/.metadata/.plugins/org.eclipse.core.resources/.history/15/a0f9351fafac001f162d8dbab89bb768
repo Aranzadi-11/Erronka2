@@ -1,0 +1,72 @@
+package klasekoariketak;
+
+import java.util.Scanner;
+
+public class Txertatu {
+
+	public static void main(String[] args) {
+		int posizioa,zenbakia,hutsuneak=0;
+		int array [] =new int[100];
+		Scanner sc = new Scanner(System.in);
+		
+		//Beteko dugu array lehenengo zatia
+		for(int i=0;i<5;i++) {
+			//array[i]=i+1;
+			array[i]=(int)(Math.random()+1*100);
+			}
+		for(int i=0;i<array.length;i++) {
+			System.out.print(array[i]+" | ");
+		}
+		while (true) {
+			hutsuneak=0;
+			for (int i=0;i<array.length;i++) {
+				if(array[i]==0) {
+					hutsuneak ++;
+				}
+			}
+			if (hutsuneak==0) {
+				break;
+			}
+		
+		System.out.println();
+		System.out.println("Sartu nahi duzun zenbakia idatzi: ");
+		zenbakia = sc.nextInt();
+		System.out.println("Zein posizioan gorde nahi duzu? (0-9): ");
+		posizioa = sc.nextInt();
+		// txertatuA(zenbakia, posizioa,array);
+		
+		// Txertatu metodoari deitzen diogu
+		boolean txertatuDa=txertatuA(zenbakia,posizioa,array);
+			if(txertatuDa==true) {
+				System.out.println("Zure zenbakia " +zenbakia+ " esandako posizioan " +posizioa+ " txertatu da");
+				for(int i=0;i<array.length;i++) {
+					System.out.print(array[i]+" | ");
+				}
+				System.out.println();
+			} else {
+				if(posizioa>=array.length) {
+					System.out.println("Zure zenbakia ezin izan da gorde");
+					System.out.println("Sartu duzun posizioa ez da egokia, posizioa maximoa " +(array.length-1)+ " da." );
+					System.out.println("Zure zenbakia ezin izan da gorde");
+					System.out.println("Sartu duzun posizioa okupatuta dago");
+				}
+			}
+		}	
+	}
+					
+		
+
+	private static boolean txertatuA(int zenbakia, int posizioa,int array []) {
+		
+		if(posizioa>=array.length) {
+			return false;
+		} else if(array[posizioa]==0) {
+			array[posizioa]=zenbakia;
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
+}

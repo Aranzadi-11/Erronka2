@@ -1,0 +1,53 @@
+package klasekoariketak;
+
+import java.util.Scanner;
+
+public class Atera {
+ 
+	public static void main(String[] args) {
+		
+		int array [] = new int [10];
+		int posizioa;
+		Scanner sc = new Scanner(System.in);
+		
+		System.out.println("Bete nahi dituzun zenabkiekin gure taula, zenbaki bakoitzaren ostena enter sakatu.");
+		
+		taulaBete(array, sc);
+		taulaErakutsi(array);
+		System.out.println("Sartu ezabatu nahi duzun posizioa: ");
+		posizioa=sc.nextInt();
+		int okupatuta= ateraA(posizioa,array);
+		System.out.println(okupatuta+" gela okupatuta daude!");
+	}
+ 
+	private static int ateraA(int posizioa, int[] array) {
+		int okupatuta=0;
+		if(array[posizioa]!=0) {
+			array[posizioa]=0;
+			System.out.println(posizioa+" ezabatu da.");
+			taulaErakutsi(array);
+		}
+		for(int i=0;i<array.length;i++) {
+			if(array[i]!=0) {
+				okupatuta++;
+			}
+		}
+		return okupatuta;
+	}
+ 
+	private static void taulaErakutsi(int[] array) {
+		for(int i=0;i<array.length;i++) {
+			System.out.print(array[i]+" | ");
+			System.out.println();
+		}
+	}
+ 
+	private static void taulaBete(int[] array, Scanner sc) {
+		for(int i=0;i<array.length;i++) {
+			System.out.print(i+" posizioa sartu:");
+			array[i]=sc.nextInt();
+			System.out.println();
+		}
+	}
+ 
+}

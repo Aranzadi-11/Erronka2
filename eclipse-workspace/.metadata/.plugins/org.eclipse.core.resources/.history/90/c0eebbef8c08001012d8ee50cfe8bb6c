@@ -1,0 +1,21 @@
+package erronka3;
+
+import java.util.List;
+
+public abstract class Botoiak {
+    protected List<String> datosSeleccionados;
+    
+    // Método para mostrar los botones según la tabla
+    public abstract void mostrarBotones();
+
+    // Método genérico para manejar la selección de un dato
+    public void seleccionarDato(String datoId) {
+        // Lógica para manejar la selección de datos
+    }
+
+    // Método para eliminar el dato seleccionado
+    public abstract void eliminarDato(String id);
+
+    // Método para actualizar los datos seleccionados
+    public abstract void actualizarDato(String id);
+}

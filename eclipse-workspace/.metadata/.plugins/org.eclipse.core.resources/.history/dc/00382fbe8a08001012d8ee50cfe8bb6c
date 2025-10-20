@@ -1,0 +1,124 @@
+package erronka3;
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import java.util.List;
+
+public class PanelTaulak extends JPanel {
+    private JTable tabla;
+    private JScrollPane scrollPane;
+    private JButton btnGehitu, btnEguneratu, btnEzabatu, btnPDFaSortu;
+    private GestorBezeroak gestorBezeroak;
+    private GestorLangileak gestorLangileak;
+    private GestorErreserbak gestorErreserbak;
+    private GestorLogelak gestorLogelak;
+    private GestorZerbitzuak gestorZerbitzuak;
+
+    public PanelTaulak() {
+        setLayout(new BorderLayout());
+
+        // Tabla y su panel de desplazamiento
+        tabla = new JTable();
+        scrollPane = new JScrollPane(tabla);
+        add(scrollPane, BorderLayout.CENTER);
+
+        // Botones
+        JPanel panelBotones = new JPanel();
+        panelBotones.setLayout(new FlowLayout());
+
+        btnGehitu = new JButton("Gehitu");
+        btnEguneratu = new JButton("Eguneratu");
+        btnEzabatu = new JButton("Ezabatu");
+        btnPDFaSortu = new JButton("PDF-a sortu");
+
+        panelBotones.add(btnGehitu);
+        panelBotones.add(btnEguneratu);
+        panelBotones.add(btnEzabatu);
+        panelBotones.add(btnPDFaSortu);
+
+        add(panelBotones, BorderLayout.SOUTH);
+
+        // Configurando el comportamiento de los botones
+        btnGehitu.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (tabla.getSelectedRow() != -1) {
+                    // Aquí se abrirá el formulario de añadir datos
+                    new FormularioAñadir().setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Mesedez, hautatu errenkada bat.");
+                }
+            }
+        });
+
+        btnEguneratu.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (tabla.getSelectedRow() != -1) {
+                    // Aquí se abrirá el formulario de actualización de datos
+                    new FormularioActualizar(tabla.getSelectedRow()).setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Mesedez, hautatu errenkada bat.");
+                }
+            }
+        });
+
+        btnEzabatu.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (tabla.getSelectedRow() != -1) {
+                    int respuesta = JOptionPane.showConfirmDialog(null, "Ziur ezabatu nahi duzula?", "Egizu baieztapena", JOptionPane.YES_NO_OPTION);
+                    if (respuesta == JOptionPane.YES_OPTION) {
+                        // Eliminar el dato de la tabla
+                        int id = (int) tabla.getValueAt(tabla.getSelectedRow(), 0); // Suponemos que la columna 0 es el ID
+                        eliminarDato(id);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Mesedez, hautatu errenkada bat.");
+                }
+            }
+        });
+
+        btnPDFaSortu.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Aquí se abrirá un formulario para generar el PDF
+                new FormularioPDF().setVisible(true);
+            }
+        });
+    }
+
+    private void eliminarDato(int id) {
+        // Lógica para eliminar el dato de la base de datos según el ID
+        // Dependiendo de la tabla, utilizamos el gestor adecuado
+        if (tabla.getName().equals("Bezeroak")) {
+            gestorBezeroak.eliminar(id);
+        } else if (tabla.getName().equals("Langileak")) {
+            gestorLangileak.eliminar(id);
+        } else if (tabla.getName().equals("Erreserbak")) {
+            gestorErreserbak.eliminar(id);
+        } else if (tabla.getName().equals("Logelak")) {
+            gestorLogelak.eliminar(id);
+        } else if (tabla.getName().equals("Zerbitzuak")) {
+            gestorZerbitzuak.eliminar(id);
+        }
+    }
+
+    // Método para actualizar la tabla con nuevos datos
+    public void actualizarTabla(String tablaSeleccionada) {
+        // Actualizar la tabla dependiendo de la selección
+        if (tablaSeleccionada.equals("Bezeroak")) {
+            List<Bezeroa> data = gestorBezeroak.obtenerTodos();
+            tabla.setModel(new ModeloTablaBezeroak(data));
+        } else if (tablaSeleccionada.equals("Langileak")) {
+            List<Langilea> data = gestorLangileak.obtenerTodos();
+            tabla.setModel(new ModeloTablaLangileak(data));
+        } else if (tablaSeleccionada.equals("Erreserbak")) {
+            List<Erreserba> data = gestorErreserbak.obtenerTodos();
+            tabla.setModel(new ModeloTablaErreserbak(data));
+        } else if (tablaSeleccionada.equals("Logelak")) {
+            List<Logela> data = gestorLogelak.obtenerTodos();
+            tabla.setModel(new ModeloTablaLogelak(data));
+        } else if (tablaSeleccionada.equals("Zerbitzuak")) {
+            List<Zerbitzua> data = gestorZerbitzuak.obtenerTodos();
+            tabla.setModel(new ModeloTablaZerbitzuak(data));
+        }
+    }
+}

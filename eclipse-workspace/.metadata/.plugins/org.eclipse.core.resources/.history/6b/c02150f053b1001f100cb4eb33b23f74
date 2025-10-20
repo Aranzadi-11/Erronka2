@@ -1,0 +1,85 @@
+package ariketaarrayaetametodoak;
+
+import java.util.Scanner;
+
+public class Ariketa1 {
+    private static String[][] eserlekuak = new String[25][4]; // 25 errenkada eta 4 zutabe
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int aukera;
+
+        do {
+            System.out.println("1. Erreserbatu  2. Ezeztatu  3. Egoera  4. Irten");
+            aukera = scanner.nextInt();
+
+            if (aukera == 1)
+                erreserbatu(scanner);
+            else if (aukera == 2)
+                ezeztatu(scanner);
+            else if (aukera == 3)
+                erakutsiEgoera();
+        } while (aukera != 4);
+        scanner.close();
+    }
+
+    private static void erreserbatu(Scanner scanner) {
+        int errenkada;
+        do {
+            System.out.print("Errenkada (1-25): ");
+            errenkada = scanner.nextInt();
+            if (errenkada < 1 || errenkada > 25) {
+                System.out.println("Errorea: Errenkada baliogabea. Mesedez, sartu 1 eta 25 artean dagoen aukera bat.");
+            }
+        } while (errenkada < 1 || errenkada > 25);
+
+        int zutabea;
+        do {
+            System.out.print("Zutabea (1-4): ");
+            zutabea = scanner.nextInt();
+            if (zutabea < 1 || zutabea > 4) {
+                System.out.println("Errorea: Zutabe baliogabea. Mesedez, sartu 1 eta 4 artean dagoen aukera bat.");
+            }
+        } while (zutabea < 1 || zutabea > 4);
+
+        errenkada--;  
+        zutabea--;    
+
+        if (eserlekuak[errenkada][zutabea] == null) {
+            System.out.print("Sartu NAN: ");
+            eserlekuak[errenkada][zutabea] = scanner.next();
+            System.out.println("Erreserbatuta!");
+        } else {
+            System.out.println("Eserlekua okupatuta dago.");
+        }
+    }
+
+    private static void ezeztatu(Scanner scanner) {
+        System.out.print("Errenkada (1-25): ");
+        int errenkada = scanner.nextInt() - 1;
+        System.out.print("Zutabea (1-4): ");
+        int zutabea = scanner.nextInt() - 1;
+
+        if (eserlekuak[errenkada][zutabea] != null) {
+            System.out.print("Sartu NAN: ");
+            if (eserlekuak[errenkada][zutabea].equals(scanner.next())) {
+                eserlekuak[errenkada][zutabea] = null;
+                System.out.println("Ezeztatuta!");
+            } else {
+                System.out.println("NANa ez da egokia.");
+            }
+        } else {
+            System.out.println("Eserlekua hutsik dago.");
+        }
+    }
+
+    private static void erakutsiEgoera() {
+        for (int i = 0; i < 25; i++) {
+            for (int j = 0; j < 4; j++) {
+                System.out.print((eserlekuak[i][j] == null ? "[Libre] " : "[Okupatuta] "));
+            }
+            System.out.println();
+        }
+    }
+}
+

@@ -1,0 +1,56 @@
+package erronka3;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class DBKonexioa {
+
+    private static final String URL = "jdbc:mysql://172.16.237.120:3306/erronka3"; 
+    private static final String USER = "Erronka";
+    private static final String PASSWORD = "Erronka3"; 
+
+    public static Connection konektatu() {
+        Connection konexioa = null;
+        try {
+            konexioa = DriverManager.getConnection(URL, USER, PASSWORD);
+            System.out.println("Konexioa arrakastatsua!");
+        } catch (SQLException e) {
+            System.out.println("Errorea konexioan: " + e.getMessage());
+        }
+        return konexioa;
+    }
+
+    public static List<String[]> getTableData(String tableName) {
+        List<String[]> data = new ArrayList<>();
+        String query = "SELECT * FROM " + tableName;
+
+        try (Connection konexioa = konektatu();
+             Statement stmt = konexioa.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            ResultSetMetaData metaData = rs.getMetaData();
+            int columnCount = metaData.getColumnCount();
+
+            // Añadir encabezados de columnas
+            String[] headers = new String[columnCount];
+            for (int i = 1; i <= columnCount; i++) {
+                headers[i - 1] = metaData.getColumnName(i);
+            }
+            data.add(headers);
+
+            // Añadir filas de datos
+            while (rs.next()) {
+                String[] row = new String[columnCount];
+                for (int i = 1; i <= columnCount; i++) {
+                    row[i - 1] = rs.getString(i);
+                }
+                data.add(row);
+            }
+        } catch (SQLException e) {
+            System.out.println("Errorea datuak lortzean: " + e.getMessage());
+        }
+
+        return data;
+    }
+}

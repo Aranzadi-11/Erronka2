@@ -1,0 +1,58 @@
+package errepikapenariketak;
+
+import java.util.Scanner;
+
+public class Ariketa4 {
+	public static void main(String[] args) {
+		Scanner scanner = new Scanner(System.in);
+
+		// Sarrerako datuak
+		System.out.print("Sartu zure pisua (kg): ");
+		double pisua = scanner.nextDouble();
+
+		System.out.print("Sartu zure altuera (metroak): ");
+		double altuera = scanner.nextDouble();
+
+		System.out.print("Sartu zure generoa (Emakume/Gizon): ");
+		String generoa = scanner.next().toLowerCase();
+
+		// IMC kalkulatzea
+		double imc = pisua / (altuera * altuera);
+		System.out.printf("Zure IMC-a: %.2f\n", imc);
+
+		// Diagnostikoa eta jarraibideak IMC eta generoaren arabera
+		if (generoa.equals("emakume")) {
+			if (imc < 16)
+				System.out.println("Desnutrizioa - Azkar! Joan medikuarengana");
+			else if (imc < 17)
+				System.out.println("Pisua Baxua - Hobeto Elikatu");
+			else if (imc < 24)
+				System.out.println("NORMALA - Zorionak!");
+			else if (imc < 29)
+				System.out.println("Gehiegizko Pisua - Dieta, Ariketa eta Sendagaiak");
+			else if (imc < 35)
+				System.out.println("Obesitatea - Sendagaiak, Globo edo Kirurgia");
+			else if (imc < 40)
+				System.out.println("Obesitate Markatua - Kirurgia Bariatrikoa");
+			else
+				System.out.println("Obesitate Morbidoa - LARRIALDIA! Kirurgia Beharrezkoa");
+		} else if (generoa.equals("gizon")) {
+			if (imc < 17)
+				System.out.println("Desnutrizioa - Azkar! Joan medikuarengana");
+			else if (imc < 18)
+				System.out.println("Pisua Baxua - Hobeto Elikatu");
+			else if (imc < 25)
+				System.out.println("NORMALA - Zorionak!");
+			else if (imc < 30)
+				System.out.println("Gehiegizko Pisua - Dieta, Ariketa eta Sendagaiak");
+			else if (imc < 35)
+				System.out.println("Obesitatea - Sendagaiak, Globo edo Kirurgia");
+			else if (imc < 40)
+				System.out.println("Obesitate Markatua - Kirurgia Bariatrikoa");
+			else
+				System.out.println("Obesitate Morbidoa - LARRIALDIA! Kirurgia Beharrezkoa");
+		} else {
+			System.out.println("Genero ez baliogabea.");
+		}
+	}
+}

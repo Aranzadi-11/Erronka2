@@ -1,0 +1,103 @@
+package erronka;
+
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+
+/**
+ * App klase honek unibertsala den frame bat sortzen du, non
+ * menuko botoiak (taulen izenekin) klik egitean, panel centralean
+ * (tablePanel) DB-tik eskuratutako JTable agertzen den.
+ *
+ * Erabiltzaile mota ("mota") parametroaren arabera:
+ * - "Administratzailea" bada, "langileak" taula ere eskuragarri izango da.
+ * - Bestela, "langileak" ez da erakutsiko.
+ *
+ * Ohartarazpena: Klase honen main metodoa ez dago. Aplikazioa
+ * Login klasearen main metodoa exekutatzen du.
+ */
+public class App extends JFrame {
+
+    private JPanel contentPane;
+    private JPanel menuPanel;
+    private JPanel tablePanel;
+    private String mota;
+
+    /**
+     * Eraikitzen du App frame-a.
+     * @param mota Erabiltzaile mota (adib.: "Administratzailea" edo beste bat)
+     */
+    public App(String mota) {
+        this.mota = mota;
+        setTitle("Datu-basearen kudeaketa");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(150, 150, 850, 500);
+
+        // Nagusi panela (BorderLayout)
+        contentPane = new JPanel(new BorderLayout());
+        setContentPane(contentPane);
+
+        // Menu panela (GridLayout, ezkerrean)
+        menuPanel = new JPanel(new GridLayout(6, 1, 10, 10));
+
+        // "Administratzailea" bada, gehitu "langileak" botoia
+        if (mota.equals("Administratzailea")) {
+            JButton btnLangileak = new JButton("Langileak");
+            btnLangileak.addActionListener(e -> loadTable("langileak"));
+            menuPanel.add(btnLangileak);
+        }
+
+        // Beti gehitu "Stock-a" botoia
+        JButton btnProduktuak = new JButton("Stock-a");
+        btnProduktuak.addActionListener(e -> loadTable("stock"));
+        menuPanel.add(btnProduktuak);
+
+        // Gehitu "emailea" botoia
+        JButton btnEmailea = new JButton("Emailea");
+        btnEmailea.addActionListener(e -> loadTable("emailea"));
+        menuPanel.add(btnEmailea);
+
+        // Gehitu "erabiltzaileak" botoia
+        JButton btnErabiltzaileak = new JButton("Erabiltzaileak");
+        btnErabiltzaileak.addActionListener(e -> loadTable("erabiltzaileak"));
+        menuPanel.add(btnErabiltzaileak);
+
+        // Gehitu "eskaerak" botoia
+        JButton btnEskaerak = new JButton("Eskaerak");
+        btnEskaerak.addActionListener(e -> loadTable("eskaerak"));
+        menuPanel.add(btnEskaerak);
+
+        // Gehitu "Irten" botoia
+        JButton btnIrten = new JButton("Irten");
+        btnIrten.addActionListener(e -> System.exit(0));
+        menuPanel.add(btnIrten);
+
+        // Menu panela ezkerrean gehitu
+        contentPane.add(menuPanel, BorderLayout.WEST);
+
+        // Taula panela (erdian)
+        tablePanel = new JPanel(new BorderLayout());
+        contentPane.add(tablePanel, BorderLayout.CENTER);
+
+        // Lehenik eta behin, kargatu "Stock-a" taula bezala default
+        loadTable("stock");
+    }
+
+    /**
+     * Metodo honek DB-tik eskuratzen du taula emandako izenarekin,
+     * eta tablePanel-eko edukia eguneratzen du.
+     * @param tableName Datu-basean dauden taulen izena (adib., "langileak")
+     */
+    private void loadTable(String tableName) {
+        JTable table = Kontsulta.getTaulenDatuak(tableName);
+        tablePanel.removeAll();
+        tablePanel.add(new JScrollPane(table), BorderLayout.CENTER);
+        tablePanel.revalidate();
+        tablePanel.repaint();
+    }
+}
+

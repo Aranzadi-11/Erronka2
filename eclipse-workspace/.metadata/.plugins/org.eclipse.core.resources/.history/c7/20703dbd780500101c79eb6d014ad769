@@ -1,0 +1,9 @@
+/**
+ * 
+ */
+/**
+ * 
+ */
+module Erronka3 {
+	requires java.desktop;
+}

@@ -1,0 +1,72 @@
+package erronka3;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Panel que se encarga de mostrar las tablas correspondientes
+ * según el tipo de usuario.
+ */
+public class TaulaErakuslea extends JPanel {
+
+    public TaulaErakuslea(String userType) {
+        setLayout(new GridLayout(0, 1));  // Una columna con múltiples filas
+        
+        // Obtener las tablas a mostrar según el tipo de usuario
+        List<String> tablesToShow = getTablesForUserType(userType);
+
+        // Crear y agregar los paneles de cada tabla
+        for (String table : tablesToShow) {
+            add(createTablePanel(table));
+        }
+    }
+
+    /**
+     * Define las tablas a mostrar para cada tipo de usuario.
+     * @param userType Tipo de usuario autenticado.
+     * @return Lista de nombres de tablas.
+     */
+    private List<String> getTablesForUserType(String userType) {
+        List<String> tables = new ArrayList<>();
+        switch (userType) {
+            case "Administratzailea":
+                tables.add("bezeroak");
+                tables.add("erreserbak");
+                tables.add("langileak");
+                tables.add("logelak");
+                tables.add("zerbitzuak");
+                break;
+            case "Informatikaria":
+                tables.add("bezeroak");
+                tables.add("erreserbak");
+                tables.add("logelak");
+                tables.add("zerbitzuak");
+                break;
+            case "Harreragilea":
+                tables.add("bezeroak");
+                tables.add("erreserbak");
+                break;
+            default:
+                break;
+        }
+        return tables;
+    }
+
+    /**
+     * Crea un panel que contiene una tabla (por ahora vacía) y un borde con el nombre de la tabla.
+     * @param tableName Nombre de la tabla.
+     * @return JPanel con la representación de la tabla.
+     */
+    private JPanel createTablePanel(String tableName) {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createTitledBorder(tableName));
+
+        // Aquí se puede agregar la lógica para recuperar y mostrar datos de la base de datos.
+        JTable table = new JTable();  // Tabla vacía por ahora
+        panel.add(new JScrollPane(table), BorderLayout.CENTER);
+
+        return panel;
+    }
+}

@@ -1,0 +1,27 @@
+package trivialariketa;
+
+public class Galdera {
+ private String galdera;
+ private String[] erantzunak;
+ private int erantzunZuzena;
+ 
+
+ public Galdera(String galdera, String[] erantzunak, int erantzunZuzena) {
+     this.galdera = galdera;
+     this.erantzunak = erantzunak;
+     this.erantzunZuzena = erantzunZuzena;
+ }
+
+
+ public void erakutsiGaldera() {
+     System.out.println(galdera);
+     for (int i = 0; i < erantzunak.length; i++) {
+         System.out.println((i + 1) + ". " + erantzunak[i]);
+     }
+ }
+
+ //zuzena den edo ez egiaztatu
+ public boolean egiaztatuErantzuna(int erabiltzaileErantzuna) {
+     return erabiltzaileErantzuna - 1 == erantzunZuzena;
+ }
+}

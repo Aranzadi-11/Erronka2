@@ -1,0 +1,106 @@
+package erronka;
+
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+import java.awt.GridLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+
+/**
+ * App klase honek unibertsala den frame bat sortzen du, non
+ * menuko botoiak (taulen izenekin) klik egitean, 
+ * panel centralean (tablePanel) DB-tik eskuratutako JTable 
+ * agertzen den.
+ * 
+ * Erabiltzaile mota ("mota") parametroaren arabera, 
+ * "Administratzailea" bada, guztia erakusten dira;
+ * bestela, "langileak" taula ez da erakutsiko.
+ */
+public class App extends JFrame {
+
+    private JPanel contentPane;  // Nagusi panela (BorderLayout)
+    private JPanel menuPanel;    // Menuko botoiak gordetzen dituen panela
+    private JPanel tablePanel;   // Taula bistaratzen den panela
+    private String mota;         // Erabiltzaile mota ("Administratzailea", beste mota bat, ...)
+
+    /**
+     * Eraikitzen du App frame-a.
+     * @param mota Erabiltzaile mota (adib.: "Administratzailea" edo beste bat)
+     */
+    public App(String mota) {
+        this.mota = mota;
+        setTitle("Datu-basearen kudeaketa");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(150, 150, 850, 500);
+        
+        // Nagusi panela sortu (layout BorderLayout)
+        contentPane = new JPanel(new BorderLayout());
+        setContentPane(contentPane);
+        
+        // Menu panela sortu (ezkerrean, botoiak antolatuta)
+        menuPanel = new JPanel(new GridLayout(6, 1, 10, 10));
+        
+        // "Administratzailea" bada, gehitu "langileak" botoia
+        if (mota.equals("Administratzailea")) {
+            JButton btnLangileak = new JButton("Langileak");
+            btnLangileak.addActionListener(e -> loadTable("langileak"));
+            menuPanel.add(btnLangileak);
+        }
+        
+        // Beti gehitu "produktuak" botoia
+        JButton btnProduktuak = new JButton("Produktuak");
+        btnProduktuak.addActionListener(e -> loadTable("produktuak"));
+        menuPanel.add(btnProduktuak);
+        
+        // Gehitu "emailea" botoia
+        JButton btnEmailea = new JButton("Emailea");
+        btnEmailea.addActionListener(e -> loadTable("emailea"));
+        menuPanel.add(btnEmailea);
+        
+        // Gehitu "erabiltzaileak" botoia
+        JButton btnErabiltzaileak = new JButton("Erabiltzaileak");
+        btnErabiltzaileak.addActionListener(e -> loadTable("erabiltzaileak"));
+        menuPanel.add(btnErabiltzaileak);
+        
+        // Gehitu "eskaerak" botoia
+        JButton btnEskaerak = new JButton("Eskaerak");
+        btnEskaerak.addActionListener(e -> loadTable("eskaerak"));
+        menuPanel.add(btnEskaerak);
+        
+        // Gehitu "Irten" botoia, aplikazioa ixteko
+        JButton btnIrten = new JButton("Irten");
+        btnIrten.addActionListener(e -> {
+            System.exit(0);
+        });
+        menuPanel.add(btnIrten);
+        
+        // Menu panela ezkerrean gehitu
+        contentPane.add(menuPanel, BorderLayout.WEST);
+        
+        // Taula panela sortu (erdian, scroll-panearekin taula agertzeko)
+        tablePanel = new JPanel(new BorderLayout());
+        contentPane.add(tablePanel, BorderLayout.CENTER);
+    }
+
+    /**
+     * Metodo honek DB-tik eskuratzen du taula emandako izenarekin,
+     * eta tablePanel-eko edukia eguneratzen du.
+     * @param tableName Datu-basean dauden taulen izena (adib., "langileak")
+     */
+    private void loadTable(String tableName) {
+        JTable table = Kontsulta.getTableData(tableName);
+        tablePanel.removeAll();  // Lehenengo, kendu aurreko eduki guztiak
+        tablePanel.add(new JScrollPane(table), BorderLayout.CENTER);  // Gehitu taula berria scroll-panearekin\n        tablePanel.revalidate();  // Eguneratu panela\n        tablePanel.repaint();     // Berriz marraztu panela
+    }
+    
+    public static void main(String[] args) {
+        EventQueue.invokeLater(() -> {
+            // Testeko parametroa: "Administratzailea" edo beste mota bat adibidez
+            App frame = new App("Administratzailea");
+            frame.setVisible(true);
+        });
+    }
+}

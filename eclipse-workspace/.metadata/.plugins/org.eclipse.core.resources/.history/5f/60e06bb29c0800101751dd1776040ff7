@@ -1,0 +1,12 @@
+/**
+ * 
+ */
+/**
+ * 
+ */
+module Erronka3 {
+	requires java.desktop;
+	requires java.sql;
+	requires pdfbox.app;
+	requires org.apache.pdfbox;
+}

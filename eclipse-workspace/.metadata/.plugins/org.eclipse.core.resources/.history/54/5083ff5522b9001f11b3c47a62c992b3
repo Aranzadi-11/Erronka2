@@ -1,0 +1,25 @@
+package ariketaklaseekin_2.entrega;
+
+public class PasswordApp {
+	public static void main(String[] args) {
+		
+	Password password1 = new Password("ABC123abc");
+	Password password2 = new Password("Sa%s9");
+	
+	
+	System.out.println("Zure 1. pasahitzaren luzeera, "+password1.LuzeeraKalkulatu()+" karakterekoa da.");
+	System.out.println("Zure 2. pasahitzaren luzeera, "+password2.LuzeeraKalkulatu()+" karakterekoa da.");
+	
+	if (password1.isStrong(password1)) {
+		System.out.println("Zure 1. pasahitza indartsua da.");
+	}else {
+		System.out.println("Zure 1. pasahitza ez da indartsua.");
+	}
+
+	if (password2.isStrong(password2)) {
+		System.out.println("Zure 2. pasahitza indartsua da.");
+	}else {
+		System.out.println("Zure 2. pasahitza ez da indartsua.");
+	}
+}
+}

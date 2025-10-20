@@ -1,0 +1,58 @@
+package pertsona;
+
+public class App {
+
+	public static void main(String[] args) {
+		
+		Pertsona pertsona1 = new Pertsona("Jaime","Elgarresta","Garcia",99);
+		Pertsona pertsona2 = new Pertsona("Abel","Rodriguez","Elgarresta","Irakaslea",45,15678929);
+		Pertsona pertsona3 = new Pertsona("Joseba","Ramos","Puado","Irakaslea",33,72547565);
+
+		System.out.println("Izena: "+pertsona3.getIzena());
+		System.out.println("Lehenengo Abizena: "+pertsona3.getAbizena1());
+		System.out.println("Bigarren Abizena: "+pertsona3.getAbizena2());
+		System.out.println("Lanbidea: "+pertsona3.getLanbidea());
+		System.out.println("Adina: "+pertsona3.getAdina());
+		System.out.println("NAN zenbakia: "+pertsona3.getNAN());
+		
+		//Inprimatu metodo bat sortuz
+		System.out.println();
+		pertsona2.inprimatu();
+		
+		//Inprimatu toString erabiliz
+		System.out.println();
+		System.out.println(pertsona1.toString());
+		
+		//Konparaketa adina
+		System.out.println();
+		if (pertsona3.bainoZaharragoaDa(pertsona2)) {
+			System.out.println(pertsona3.getIzena()+ ", "+ pertsona2.getIzena()+" baino zaharragoa da!");
+		}else {
+			System.out.println(pertsona3.getIzena()+ ", "+ pertsona2.getIzena()+" baino gazteagoa da!");
+		}
+		
+		//Konparaketa izena
+		System.out.println();
+		if (pertsona3.izenBerdina(pertsona2)) {
+			System.out.println(pertsona3.getIzena()+" "+pertsona3.getAbizena1()+ " eta "+ pertsona2.getIzena()+" "+pertsona2.getAbizena1()+", izen berdina dute!");
+		}else {
+			System.out.println(pertsona3.getIzena()+" "+pertsona3.getAbizena1()+ " eta "+ pertsona2.getIzena()+" "+pertsona2.getAbizena1()+", izen ezberdina dute!");
+		}
+		
+		//Abizena konparatu
+		System.out.println();
+		if (pertsona3.abizenBerdina(pertsona2)) {
+			System.out.println(pertsona3.getIzena()+" "+pertsona3.getAbizena1()+" "+pertsona3.getAbizena2()+ " eta "+ pertsona2.getIzena()+" "+pertsona2.getAbizena1()+" "+pertsona2.getAbizena2()+", familia berekoak dira!");
+		}else {
+			System.out.println(pertsona3.getIzena()+" "+pertsona3.getAbizena1()+" "+pertsona3.getAbizena2()+ " eta "+ pertsona2.getIzena()+" "+pertsona2.getAbizena1()+" "+pertsona2.getAbizena2()+", familia ezberdinekoak dira!");
+		}
+		
+		//Jubilatuta dagoen edo ez jarri
+		System.out.println();
+		if (pertsona3.jubilatuDa(pertsona3)) {
+			System.out.println(pertsona3.getIzena()+" "+pertsona3.getAdina()+" Jubilatuta dago!");
+		}else {
+			System.out.println(pertsona3.getIzena()+" "+pertsona3.getAbizena1()+" "+pertsona3.getAbizena2()+ " eta "+ pertsona2.getIzena()+" "+pertsona2.getAbizena1()+" "+pertsona2.getAbizena2()+", familia ezberdinekoak dira!");
+		}
+	}
+}

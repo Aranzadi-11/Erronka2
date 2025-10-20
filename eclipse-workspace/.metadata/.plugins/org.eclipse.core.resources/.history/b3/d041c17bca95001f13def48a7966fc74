@@ -1,0 +1,83 @@
+package erronka;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.Scanner;
+
+public class Login {
+    // Datu-basearekin konektatzeko metodoa
+    private static Connection konektatuDatuBasea() {
+        String url = "jdbc:mysql://localhost:3306/Erronka"; // Zure datu-basera egokitu
+        String erabiltzaileaBD = "root"; // Zure datu-basearen erabiltzailea
+        String pasahitzaBD = "abc123ABC"; // Zure datu-basearen pasahitza
+
+        try {
+            return DriverManager.getConnection(url, erabiltzaileaBD, pasahitzaBD);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    // Erabiltzailea datu-basean balioztatzeko metodoa
+    private static Erabiltzailea balioztatuErabiltzailea(String erabiltzaileIzena, String pasahitza) {
+        Connection konekzioa = konektatuDatuBasea();
+
+        if (konekzioa != null) {
+            String sql = "SELECT * FROM erabiltzaileak WHERE erabiltzaileIzena = ? AND pasahitza = ?";
+
+            try (PreparedStatement statement = konekzioa.prepareStatement(sql)) {
+                statement.setString(1, erabiltzaileIzena);
+                statement.setString(2, pasahitza);
+                ResultSet emaitza = statement.executeQuery();
+
+                // Erabiltzailea aurkitzen bada, erabiltzailea itzultzen dugu
+                if (emaitza.next()) {
+                    String erabiltzaileMota = emaitza.getString("erabiltzaileMota");
+                    return new Erabiltzailea(erabiltzaileIzena, pasahitza, erabiltzaileMota);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    // Menu nagusia login arrakastatsuaren ondoren
+    private static void erakutsiMenua(String erabiltzaileMota) {
+        System.out.println("\nOngi etorri, " + erabiltzaileMota);
+        System.out.println("Hau da menu nagusia.");
+        System.out.println("1. Produktuak kudeatu.");
+        System.out.println("2. Langileak kudeatu.");
+        System.out.println("3. Irten");
+        // Menuaren aukerak hemen inplementatu ditzakezu
+    }
+
+    // Login-a hasteko metodo nagusia
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("=== LOGIN ===");
+        System.out.print("Erabiltzaile izena: ");
+        String erabiltzaileIzena = scanner.nextLine();
+
+        System.out.print("Pasahitza: ");
+        String pasahitza = scanner.nextLine();
+
+        // Erabiltzailea balioztatzen dugu
+        Erabiltzailea erabiltzailea = balioztatuErabiltzailea(erabiltzaileIzena, pasahitza);
+
+        // Erabiltzailea zuzena bada, menua erakusten dugu
+        if (erabiltzailea != null) {
+            System.out.println("\nLogin arrakastatsua!");
+            erakutsiMenua(erabiltzailea.getErabiltzaileMota());
+        } else {
+            System.out.println("\nErrorea: Erabiltzailea edo pasahitza okerra.");
+        }
+
+        scanner.close();
+    }
+}
+

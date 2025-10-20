@@ -1,0 +1,24 @@
+package klasekoariketak;
+
+import java.util.Scanner;
+
+public class While {
+	
+	public static void main(string[] args) {
+		int zenbakia; // zenbakia jasotzeko aldagaia definitzen dugu.
+		Scanner sc = new Scanner (System.in);
+		
+		do {
+		Scanner.out.println("Sartu zenbaki bat mesedez: ");
+		zenbakia = sc.nextInt();
+		
+		if(zenbakia%2==0) {
+			System.out.println("Zenbakia bikoitia da.");
+		}else {
+			System.out.println("Zenbakia bakoitia da.");
+		}
+		
+		}
+	}
+
+}

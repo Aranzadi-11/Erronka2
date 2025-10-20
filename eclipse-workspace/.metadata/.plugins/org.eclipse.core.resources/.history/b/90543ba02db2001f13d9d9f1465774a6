@@ -1,0 +1,129 @@
+package KlasekoAriketak;
+
+/*
+ * Programa bat nun hegazkin bateko eserlekuak erreserbatu edo bertan behera uzteko aukera duen.
+ * Zein eserleku dauden okupatuta eta libre erakutsi behar ditu.
+ * Eserlekuak 25 lerro eta 4 zutabetan banatuta egongo da.
+ * Erreserba egiteko aukera errenkada eta zutabea eskatuko ditu.
+ * Bidaiariaren NAN-a gorde beharko da, hau eserleku bat izango da.
+ * Programak eserlekua okupatuta ez dagoela egiaztatuko du, eta erreserbatu egingo du.
+ * Ezeztatzeko aukerak informazio bera eskatuko du.
+ * Sartutako NAN-a zenbakiarekin bat datorrela egiaztatuko du.
+ */
+
+import java.util.Scanner;
+
+public class Ariketaaaaa {
+
+	public static void main(String[] args) {
+
+		int lerroa = 24; 
+		int zutabea = 4;
+		int nans;
+		int primeraLinea = 0;
+		int eserlekua[][] = new int[lerroa][zutabea];
+
+		for (int i = 0; i < lerroa; i++) {
+			for (int j = 0; j < zutabea; j++) {
+				eserlekua[i][j] = 0;
+			}
+		}
+
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Ongi etorri eserlekuak erreserbatzeko programara.");
+		System.out.println("Zer egin nahi duzu?"); 
+		System.out.println("1. Erreserba egin\n2. Erreserba ezeztatu");
+
+		int menuzenb = sc.nextInt();
+
+		while (menuzenb != 3) {
+			if (menuzenb == 1) {
+				System.out.println();
+				System.out.println("1. NAN-a sartu\n2. Taula ikusi\n3. Atzera bota");
+				int aukerazenb = sc.nextInt();
+
+				while (aukerazenb != 3) {
+					if (aukerazenb == 1) {
+						System.out.println("Jarri zure NAN zenbakia eserlekua erreserbatzeko: ");
+						nans = sc.nextInt();
+						// eserlekua[0][3] = nans;
+
+						if (nans >= 0 || nans <= 99999999) { 
+							for (int i = 0; i <= primeraLinea; i++) {
+								if (nans == eserlekua[i][3]) {
+									System.out.println("NAN hori badago!");
+									break;
+								} else {
+									eserlekua[primeraLinea][3] = nans;
+									System.out.println("Aukeratu nahi duzun eserlekuaren lerro zenbakia jarri: ");
+									int lerroaSar = sc.nextInt();
+									// eserlekua[primeraLinea][1] = lerroaSar;
+									System.out.println("Aukeratu nahi duzun eserlekuaren zutabe zenbakia jarri: ");
+									int zutabeaSar = sc.nextInt();
+									// eserlekua[primeraLinea][2] = zutabeaSar;
+
+									if (lerroaSar == 0 || zutabeaSar == 0) {
+										System.out.println("Ez da posizio hori existitzen!");
+									} else {
+										eserlekua[lerroaSar - 1][zutabeaSar - 1] = 1;
+										for (int j = 0; j < 4; j++) {
+											System.out.print(j + 0 + "   ");
+										}
+										System.out.println();
+										for (int x = 0; x < lerroa; x++) {
+											System.out.print((x + 1) + " ");
+											if (x + 1 < 10)
+												System.out.print(" ");
+											for (int j = 0; j < 3; j++) {
+												System.out.print("|" + eserlekua[x][j] + "| ");
+											}
+											System.out.println();
+										}
+										primeraLinea++;
+										break;
+									}
+								}
+							}
+						} else {
+							System.out.println("Jarritako NAN zenbakiak zenbaki kopuru okerra dauka.");
+						}
+						break;
+					}
+					if (aukerazenb == 2) {
+						eserlekuakErakutsi(lerroa, zutabea, eserlekua);
+						System.out.println("1. Atzera bota ");
+						int atzera = sc.nextInt();
+						if (atzera == 1) {
+							break;
+						}
+						break;
+					}
+				}
+				} else if (menuzenb == 2) {
+
+				}
+				if (menuzenb==1) {
+					System.out.println("Atzera bota duzu.");
+					break;
+				}
+			}
+		}
+
+	private static void eserlekuakErakutsi(int lerroa, int zutabea, int[][] eserlekua) {
+
+		for (int j = 0; j < 4; j++) {
+			System.out.print(j + 0 + "   ");
+		}
+		System.out.println();
+		for (int i = 0; i < lerroa; i++) {
+			System.out.print((i + 1) + " ");
+			if (i + 1 < 10)
+				System.out.print(" ");
+			for (int j = 0; j < 3; j++) {
+				System.out.print("|" + eserlekua[i][j] + "| ");
+			}
+			System.out.println();
+		}
+
+	}
+	}

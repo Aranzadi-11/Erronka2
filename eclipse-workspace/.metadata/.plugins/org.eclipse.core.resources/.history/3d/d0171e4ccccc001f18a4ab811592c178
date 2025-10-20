@@ -1,0 +1,28 @@
+package trivialariketa;
+
+//Galderen egitura definitzen duen klasea
+class Galdera {
+ private String galdera;
+ private String[] erantzunak;
+ private int erantzunZuzena; // 0, 1 edo 2 izan daiteke
+
+ // Eraikitzailea
+ public Galdera(String galdera, String[] erantzunak, int erantzunZuzena) {
+     this.galdera = galdera;
+     this.erantzunak = erantzunak;
+     this.erantzunZuzena = erantzunZuzena;
+ }
+
+ // Galdera eta erantzunak erakusteko metodoa
+ public void erakutsiGaldera() {
+     System.out.println(galdera);
+     for (int i = 0; i < erantzunak.length; i++) {
+         System.out.println((i + 1) + ". " + erantzunak[i]);
+     }
+ }
+
+ // Erantzuna zuzena den ala ez egiaztatzeko metodoa
+ public boolean egiaztatuErantzuna(int erabiltzaileErantzuna) {
+     return erabiltzaileErantzuna - 1 == erantzunZuzena;
+ }
+}

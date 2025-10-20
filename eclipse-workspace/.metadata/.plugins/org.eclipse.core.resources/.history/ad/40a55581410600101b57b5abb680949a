@@ -1,0 +1,118 @@
+package erronka3;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Aplikazioko leiho nagusia: taula eremu nagusia eta eskumenean botoi panela.
+ * Kolore paleta berria: zuri nagusi, urdin eta beltza.
+ */
+public class APP extends JFrame {
+    private static final long serialVersionUID = 1L;
+    private JPanel edukiontzia;
+    private JPanel botoiakPanel;  // Eskumenean dauden botoiak
+    private JPanel taulaPanel;     // Taula datuak erakusteko panela
+
+    public APP(String userType) {
+        // Leihoaren ezarpenak
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 1000, 600);
+        edukiontzia = new JPanel(new BorderLayout());
+        edukiontzia.setBackground(Color.WHITE);
+        setContentPane(edukiontzia);
+        setTitle("Aplikazioa");
+
+        // Taula panela: gainerako espazioa, funtsezko eremu nagusia (zuria)
+        taulaPanel = new JPanel(new BorderLayout());
+        taulaPanel.setBackground(Color.WHITE);
+        taulaPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+
+        // Botoiak panela: leihoaren eskumenean, zuri oinarrizko kolorearekin
+        botoiakPanel = new JPanel();
+        botoiakPanel.setLayout(new BoxLayout(botoiakPanel, BoxLayout.Y_AXIS));
+        botoiakPanel.setBackground(Color.WHITE);
+        botoiakPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 2, new Color(30, 144, 255))); // Urdin marjin
+        botoiakPanel.setPreferredSize(new Dimension(250, 600));
+
+        // Botoiak sortu, erabiltzaile mota arabera
+        sortuBotoiak(userType);
+
+        // Leihoan ezarri: taula eremu nagusia ezkerrean (edo zentrora) eta botoiak eskuinean
+        edukiontzia.add(taulaPanel, BorderLayout.CENTER);
+        edukiontzia.add(botoiakPanel, BorderLayout.EAST);
+
+        setVisible(true);
+    }
+
+    private void sortuBotoiak(String userType) {
+        List<String> taulak = getTaulakErabiltzaileMota(userType);
+        
+        for (String taula : taulak) {
+            JButton taulaBotoia = new JButton(taula.toUpperCase());
+            // Botoi handiak eta ikusgarriak: zuri background, urdin border eta beltzako testua
+            taulaBotoia.setAlignmentX(Component.CENTER_ALIGNMENT);
+            taulaBotoia.setMaximumSize(new Dimension(230, 60));
+            taulaBotoia.setFont(new Font("Arial", Font.BOLD, 18));
+            taulaBotoia.setForeground(Color.BLACK);
+            taulaBotoia.setBackground(Color.WHITE);
+            taulaBotoia.setFocusPainted(false);
+            taulaBotoia.setBorder(BorderFactory.createLineBorder(new Color(30, 144, 255), 2));
+            taulaBotoia.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            taulaBotoia.addActionListener(e -> erakutsiTaula(taula));
+            
+            // Espazio bat gehitu botoien artean
+            botoiakPanel.add(Box.createVerticalStrut(15));
+            botoiakPanel.add(taulaBotoia);
+        }
+        // Espazio amaierakoen bat
+        botoiakPanel.add(Box.createVerticalGlue());
+    }
+
+    private void erakutsiTaula(String taulaIzena) {
+        JTable table = new JTable();
+        // Taula betetzeko datuak datu-basetik
+        table.setModel(new TaulaErakuslea(taulaIzena));
+        table.setFillsViewportHeight(true);
+        table.setFont(new Font("Arial", Font.PLAIN, 14));
+        table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 16));
+        table.setRowHeight(25);
+        
+        // Scroll panela, kolore zuri fondoarekin
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.getViewport().setBackground(Color.WHITE);
+        
+        taulaPanel.removeAll();
+        taulaPanel.add(scrollPane, BorderLayout.CENTER);
+        taulaPanel.revalidate();
+        taulaPanel.repaint();
+    }
+
+    private List<String> getTaulakErabiltzaileMota(String userType) {
+        List<String> taulak = new ArrayList<>();
+        switch (userType) {
+            case "Administratzailea":
+                taulak.add("bezeroak");
+                taulak.add("erreserbak");
+                taulak.add("langileak");
+                taulak.add("logelak");
+                taulak.add("zerbitzuak");
+                break;
+            case "Informatikaria":
+                taulak.add("bezeroak");
+                taulak.add("erreserbak");
+                taulak.add("logelak");
+                taulak.add("zerbitzuak");
+                break;
+            case "Harreragilea":
+                taulak.add("bezeroak");
+                taulak.add("erreserbak");
+                break;
+            default:
+                break;
+        }
+        return taulak;
+    }
+}
