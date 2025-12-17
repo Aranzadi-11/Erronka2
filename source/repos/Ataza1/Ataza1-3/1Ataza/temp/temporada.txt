@@ -1,0 +1,11 @@
+Izena: Ander, Pertsona kopurua: 5, Gela: 1, Prezioa gauko: 120, HasieraEguna: 29/04/2023, AmaieraEguna: 02/05/2023
+Izena: Ane, Pertsona kopurua: 3, Gela: 2, Prezioa gauko: 95, HasieraEguna: 10/06/2023, AmaieraEguna: 15/06/2023
+Izena: Iker, Pertsona kopurua: 4, Gela: 1, Prezioa gauko: 110, HasieraEguna: 03/07/2023, AmaieraEguna: 08/07/2023
+Izena: Maite, Pertsona kopurua: 2, Gela: 1, Prezioa gauko: 80, HasieraEguna: 15/08/2023, AmaieraEguna: 18/08/2023
+Izena: Jon, Pertsona kopurua: 5, Gela: 3, Prezioa gauko: 150, HasieraEguna: 01/09/2023, AmaieraEguna: 04/09/2023
+Izena: Leire, Pertsona kopurua: 6, Gela: 2, Prezioa gauko: 180, HasieraEguna: 20/05/2023, AmaieraEguna: 23/05/2023
+Izena: Mikel, Pertsona kopurua: 3, Gela: 1, Prezioa gauko: 100, HasieraEguna: 05/06/2023, AmaieraEguna: 09/06/2023
+Izena: Naiara, Pertsona kopurua: 4, Gela: 2, Prezioa gauko: 125, HasieraEguna: 12/07/2023, AmaieraEguna: 17/07/2023
+Izena: Oier, Pertsona kopurua: 2, Gela: 1, Prezioa gauko: 90, HasieraEguna: 25/08/2023, AmaieraEguna: 29/08/2023
+Izena: Amaia, Pertsona kopurua: 5, Gela: 2, Prezioa gauko: 140, HasieraEguna: 08/09/2023, AmaieraEguna: 12/09/2023
+Izena: Asier, Pertsona kopurua: 6, Gela: 3, Prezioa gauko: 200, HasieraEguna: 15/10/2023, AmaieraEguna: 19/10/2023

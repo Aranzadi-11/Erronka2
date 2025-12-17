@@ -1,0 +1,9 @@
+C:\Users\aranz\source\repos\Erronka1API\Erronka1API\obj\Debug\net8.0\Erronka1API.csproj.AssemblyReference.cache
+C:\Users\aranz\source\repos\Erronka1API\Erronka1API\obj\Debug\net8.0\rpswa.dswa.cache.json
+C:\Users\aranz\source\repos\Erronka1API\Erronka1API\obj\Debug\net8.0\Erronka1API.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\aranz\source\repos\Erronka1API\Erronka1API\obj\Debug\net8.0\Erronka1API.AssemblyInfoInputs.cache
+C:\Users\aranz\source\repos\Erronka1API\Erronka1API\obj\Debug\net8.0\Erronka1API.AssemblyInfo.cs
+C:\Users\aranz\source\repos\Erronka1API\Erronka1API\obj\Debug\net8.0\Erronka1API.csproj.CoreCompileInputs.cache
+C:\Users\aranz\source\repos\Erronka1API\Erronka1API\obj\Debug\net8.0\Erronka1API.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\aranz\source\repos\Erronka1API\Erronka1API\obj\Debug\net8.0\Erronka1API.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\aranz\source\repos\Erronka1API\Erronka1API\obj\Debug\net8.0\Erronka1API.sourcelink.json

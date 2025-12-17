@@ -1,0 +1,10 @@
+Eroslea: Ane Miren, Produktua: Telebista, Kantitatea: 1, Prezioa: 499€, Data: 2021/02/15
+Eroslea: Jon Kepa, Produktua: Mugikorra, Kantitatea: 2, Prezioa: 699€, Data: 2021/03/22
+Eroslea: Maite Lorea, Produktua: Ordenagailua, Kantitatea: 1, Prezioa: 899€, Data: 2021/04/30
+Eroslea: Iker Ander, Produktua: Saskibaloi baloia, Kantitatea: 3, Prezioa: 25€, Data: 2021/05/07
+Eroslea: Leire Olaia, Produktua: Bizikleta, Kantitatea: 1, Prezioa: 350€, Data: 2021/06/19
+Eroslea: Aitor Mikel, Produktua: Kafetera, Kantitatea: 1, Prezioa: 75€, Data: 2021/07/11
+Eroslea: Nerea Garazi, Produktua: Entzungailuak, Kantitatea: 2, Prezioa: 50€, Data: 2021/08/09
+Eroslea: Gorka Eneko, Produktua: Liburua, Kantitatea: 4, Prezioa: 60€, Data: 2021/09/23
+Eroslea: Iraitz Uxue, Produktua: Tablet-a, Kantitatea: 1, Prezioa: 299€, Data: 2021/10/14
+Eroslea: Joxe Mihel, Produktua: Kanpaina-denda, Kantitatea: 2, Prezioa: 150€, Data: 2021/11/01

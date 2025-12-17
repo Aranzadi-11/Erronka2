@@ -1,0 +1,6 @@
+@TPV_ERRONKA_HostAddress = http://localhost:5070
+
+GET {{TPV_ERRONKA_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

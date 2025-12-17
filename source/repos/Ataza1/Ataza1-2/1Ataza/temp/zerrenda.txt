@@ -1,0 +1,10 @@
+Izena: Joxe Mihel, pertsonaKop: 4, data: 2010/07/11
+Izena: Ane Miren, pertsonaKop: 5, data: 2011/03/09
+Izena: Jon Kepa, pertsonaKop: 3, data: 2012/08/12
+Izena: Maite, pertsonaKop: 6, data: 2013/01/15
+Izena: Ander, pertsonaKop: 2, data: 2014/06/25
+Izena: Olaia, pertsonaKop: 7, data: 2015/02/18
+Izena: Aitor, pertsonaKop: 4, data: 2016/11/30
+Izena: Nerea, pertsonaKop: 3, data: 2017/07/14
+Izena: Gorka, pertsonaKop: 5, data: 2018/09/19
+Izena: Iraitz, pertsonaKop: 6, data: 2019/12/22

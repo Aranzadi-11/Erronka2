@@ -1,0 +1,8 @@
+C:\Users\aranz\source\repos\Ataza1\Ataza1-2\bin\Debug\Ataza1-2.exe.config
+C:\Users\aranz\source\repos\Ataza1\Ataza1-2\bin\Debug\Ataza1-2.exe
+C:\Users\aranz\source\repos\Ataza1\Ataza1-2\bin\Debug\Ataza1-2.pdb
+C:\Users\aranz\source\repos\Ataza1\Ataza1-2\obj\Debug\Ataza1-2.csproj.AssemblyReference.cache
+C:\Users\aranz\source\repos\Ataza1\Ataza1-2\obj\Debug\Ataza1-2.csproj.CoreCompileInputs.cache
+C:\Users\aranz\source\repos\Ataza1\Ataza1-2\obj\Debug\Ataza1-2.exe
+C:\Users\aranz\source\repos\Ataza1\Ataza1-2\obj\Debug\Ataza1-2.pdb
+C:\Users\aranz\source\repos\Ataza1\Ataza1-2\obj\Debug\Ataza1-2.exe.config

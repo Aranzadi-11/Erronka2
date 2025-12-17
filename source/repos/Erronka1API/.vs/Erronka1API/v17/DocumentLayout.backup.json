@@ -1,0 +1,71 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\aranz\\source\\repos\\Erronka1API\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{822FCFAC-A973-4478-9115-255ACADC891B}|Erronka1API\\Erronka1API.csproj|c:\\users\\aranz\\source\\repos\\erronka1api\\erronka1api\\maps\\erreserbamapeoa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{822FCFAC-A973-4478-9115-255ACADC891B}|Erronka1API\\Erronka1API.csproj|solutionrelative:erronka1api\\maps\\erreserbamapeoa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{822FCFAC-A973-4478-9115-255ACADC891B}|Erronka1API\\Erronka1API.csproj|c:\\users\\aranz\\source\\repos\\erronka1api\\erronka1api\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{822FCFAC-A973-4478-9115-255ACADC891B}|Erronka1API\\Erronka1API.csproj|solutionrelative:erronka1api\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{822FCFAC-A973-4478-9115-255ACADC891B}|Erronka1API\\Erronka1API.csproj|c:\\users\\aranz\\source\\repos\\erronka1api\\erronka1api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{822FCFAC-A973-4478-9115-255ACADC891B}|Erronka1API\\Erronka1API.csproj|solutionrelative:erronka1api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ErreserbaMapeoa.cs",
+              "DocumentMoniker": "C:\\Users\\aranz\\source\\repos\\Erronka1API\\Erronka1API\\Maps\\ErreserbaMapeoa.cs",
+              "RelativeDocumentMoniker": "Erronka1API\\Maps\\ErreserbaMapeoa.cs",
+              "ToolTip": "C:\\Users\\aranz\\source\\repos\\Erronka1API\\Erronka1API\\Maps\\ErreserbaMapeoa.cs",
+              "RelativeToolTip": "Erronka1API\\Maps\\ErreserbaMapeoa.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-01T15:33:02.267Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\aranz\\source\\repos\\Erronka1API\\Erronka1API\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "Erronka1API\\AppDbContext.cs",
+              "ToolTip": "C:\\Users\\aranz\\source\\repos\\Erronka1API\\Erronka1API\\AppDbContext.cs*",
+              "RelativeToolTip": "Erronka1API\\AppDbContext.cs*",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAQwAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-01T15:27:41.526Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\aranz\\source\\repos\\Erronka1API\\Erronka1API\\Program.cs",
+              "RelativeDocumentMoniker": "Erronka1API\\Program.cs",
+              "ToolTip": "C:\\Users\\aranz\\source\\repos\\Erronka1API\\Erronka1API\\Program.cs",
+              "RelativeToolTip": "Erronka1API\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-01T15:17:58.001Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

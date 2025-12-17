@@ -1,0 +1,6 @@
+@ErronkaAPI_HostAddress = http://localhost:5101
+
+GET {{ErronkaAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
